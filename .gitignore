@@ -23,3 +23,5 @@ go.work
 # hugo
 
 docs/resources/_gen
+docs/public
+public
