@@ -1,4 +1,4 @@
-name: golangci-lint
+name: project checks
 on:
   push:
     branches:
@@ -15,16 +15,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 20
       - uses: actions/setup-go@v4
         with:
           go-version: '1.21'
-          go-version-file: go.mod
-          cache: false
-
-      - name: git-changes_check
-        run: go run cmd/custom/main.go
 
       - name: golangci-lint
         uses: golangci/golangci-lint-action@v3
@@ -34,7 +27,47 @@ jobs:
           # Optional: The mode to install golangci-lint. It can be 'binary' or 'goinstall'.
           # install-mode: "goinstall"
 
-      - name: Run tests with coverage report output
+  git-check:
+    name: git-checks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 20
+      - uses: actions/setup-go@v4
+        with:
+          go-version: '1.21'
+
+      - name: git-changes_check
+        run: go run cmd/custom/main.go
+
+  tests:
+    name: tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v4
+        with:
+          go-version: '1.21'
+
+      - name: Run tests
         run: go test ./... -coverprofile=coverage.out
 
-      - uses: k1LoW/octocov-action@v0
+      - name: octocov-coverage-gateway
+        uses: k1LoW/octocov-action@v0
+
+  mutation-tests:
+    name: mutation-tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v4
+        with:
+          go-version: '1.21'
+
+      - name: gramlins-mutation-testing
+        uses: go-gremlins/gremlins-action@v1
+        with:
+          version: 'v0.4.0'
+          args: ""
+          workdir: .
