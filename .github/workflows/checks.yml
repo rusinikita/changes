@@ -20,6 +20,7 @@ jobs:
       - uses: actions/setup-go@v4
         with:
           go-version: '1.21'
+          go-version-file: go.mod
           cache: false
 
       - name: git-changes_check
@@ -32,3 +33,8 @@ jobs:
           only-new-issues: true
           # Optional: The mode to install golangci-lint. It can be 'binary' or 'goinstall'.
           # install-mode: "goinstall"
+
+      - name: Run tests with coverage report output
+        run: go test ./... -coverprofile=coverage.out
+
+      - uses: k1LoW/octocov-action@v0
