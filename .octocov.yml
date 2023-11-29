@@ -1,0 +1,32 @@
+coverage:
+  if: true
+  acceptable: current >= 80%
+  badge:
+    path: docs/assets/coverage.svg
+codeToTestRatio:
+  code:
+    - '**/*.go'
+    - '!**/*_test.go'
+  test:
+    - '**/*_test.go'
+  badge:
+    path: docs/assets/ratio.svg
+testExecutionTime:
+  acceptable: 1min30sec
+  badge:
+    path: docs/assets/time.svg
+diff:
+  datastores:
+    - artifact://${GITHUB_REPOSITORY}
+#push:
+#  if: is_default_branch
+comment:
+  if: is_pull_request
+summary:
+  if: true
+# body:
+#   if: is_pull_request
+report:
+  if: is_default_branch
+  datastores:
+    - artifact://${GITHUB_REPOSITORY}
