@@ -11,55 +11,13 @@ import (
 	"github.com/go-git/go-git/v5/plumbing/storer"
 )
 
-func main() {
-	repository, err := git.PlainOpenWithOptions(".", &git.PlainOpenOptions{
-		DetectDotGit:          true,
-		EnableDotGitCommonDir: true,
-	})
-	if err != nil {
-		log.Fatalln("open", err)
-	}
-
-	commitIter, err := repository.Log(&git.LogOptions{
-		All: false,
-	})
-	if err != nil {
-		log.Fatalln("log", err)
-	}
-
-	commitsHandled := 0
-	err = commitIter.ForEach(func(commit *object.Commit) error {
-		commitsHandled++
-		if commitsHandled > 10 {
-			return storer.ErrStop
-		}
-
-		checkErr := check(commit)
-		if checkErr != nil {
-			log.Fatalln("check", checkErr)
-		}
-
-		return nil
-	})
-	if err != nil {
-		log.Fatalln("for", err)
-	}
-
-	log.Println("finished")
-}
-
 const (
 	maxTitleLen       = 40
 	maxFileChangesLen = 400
 )
 
-func check(commit *object.Commit) error {
-	stats, err := commit.Stats()
-	if err != nil {
-		return fmt.Errorf("stats %w", err)
-	}
-
-	title := strings.SplitN(commit.Message, "\n", 1)[0]
+func check(commit *object.Commit, stats object.FileStats) error {
+	title := strings.SplitN(commit.Message, "\n", 2)[0] //nolint:revive
 
 	if strings.HasPrefix(title, "Merge") {
 		return nil
@@ -80,4 +38,56 @@ func check(commit *object.Commit) error {
 	}
 
 	return nil
+}
+
+func main() {
+	if err := run(); err != nil {
+		log.Fatalln(err)
+	}
+
+	log.Println("ok")
+}
+
+func run() error {
+	rep, _ := git.PlainOpenWithOptions(".", &git.PlainOpenOptions{
+		DetectDotGit:          true,
+		EnableDotGitCommonDir: true,
+	})
+
+	return repositoryChecks(rep)
+}
+
+type repository interface {
+	Log(o *git.LogOptions) (object.CommitIter, error)
+}
+
+func repositoryChecks(r repository) error {
+	commitIter, err := r.Log(&git.LogOptions{
+		All: false,
+	})
+	if err != nil {
+		return err
+	}
+
+	commitsHandled := 0
+	err = commitIter.ForEach(func(commit *object.Commit) error {
+		commitsHandled++
+		if commitsHandled > 10 {
+			return storer.ErrStop
+		}
+
+		stats, statsErr := commit.Stats()
+		if statsErr != nil {
+			return fmt.Errorf("stats %w", statsErr)
+		}
+
+		checkErr := check(commit, stats)
+		if checkErr != nil {
+			return checkErr
+		}
+
+		return nil
+	})
+
+	return err
 }
