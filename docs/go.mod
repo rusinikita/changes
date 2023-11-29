@@ -1,6 +1,6 @@
 module github.com/rusinikita/changes/docs
 
-go 1.21.0
+go 1.21
 
 require (
 	github.com/colinwilson/lotusdocs v0.1.0 // indirect
