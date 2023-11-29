@@ -1,0 +1,76 @@
+# Note: Template blocks require a 'weight' parameter so they're correctly ordered on the landing page
+
+# Hero
+hero:
+  enable: true
+  weight: 10
+
+  backgroundImage:
+    path: "images/templates/hero"
+    filename:
+      desktop: "gradient-desktop.webp"
+      mobile: "gradient-mobile.webp"
+
+  badge:
+   text: early development
+   color: primary # primary, secondary, success, danger, warning, info, light, dark
+   pill: false # boolean
+   soft: true # boolean
+
+#  titleLogo:
+#   path: "images/logos"
+#   filename: "title_logo.png"
+#   alt: "Lotus Docs Logo"
+#   height: 80px
+
+  title: "Changes"
+  subtitle: A **fast** and **feature-reach** Pull Request git changes validation tool written in **Go**. Spend less time on DoD validation.
+
+#  image:
+#    path: "images" # path to image under configured assets directory. default 'images'
+#    filename: "lotus_docs_screenshot.png" # filename of your hero image (including file extension)
+#    alt: "Lotus Docs Screenshot" # Optional but recommended
+#    boxShadow: true # default 'false' (excludes .svg images)
+#    rounded: true # round the image corners? default 'false' (excludes .svg images)
+
+  ctaButton:
+    icon: construction
+    btnText: "Plans and progress"
+    url: "/docs/"
+
+#  cta2Button:
+#    icon: construction
+#    btnText: "In Development"
+#    url: "https://github.com/colinwilson/lotusdocs"
+
+  info: "**Open Source** GPL 3.0 Licensed."
+
+# Features Grid
+features:
+  enable: true
+  weight: 20
+
+  title: What I can do?
+  subtitle: This tool shares same idea as [Danger](https://danger.systems/ruby/) but simpler, faster and easier to use.
+
+  items:
+    - title: Commit message checks
+      icon: subject
+      description: Validate commit messages format. Conventional Commits or custom.
+
+    - title: Changelog
+      icon: history
+      description: Generate changelog from Git history.
+
+    - title: Git changes validation
+      icon: warning
+      description: Lots of checks upon PR changes. Max changes, access-list secured files, no merge commits, target branch, etc
+
+    - title: Lua support
+      icon: settings
+      description: Create any custom checks without CI time sacrifice
+
+# Image compare
+image_compare:
+  enable: false
+  weight: 30

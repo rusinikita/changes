@@ -19,3 +19,7 @@
 
 # Go workspace file
 go.work
+
+# hugo
+
+docs/resources/_gen
