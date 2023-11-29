@@ -27,6 +27,10 @@ func check(commit *object.Commit, stats object.FileStats) error {
 		return fmt.Errorf("too long title '%s'", title)
 	}
 
+	if !strings.HasSuffix(commit.Author.Email, "gmail.com") {
+		return fmt.Errorf("commit from work email '%s'", title)
+	}
+
 	for _, stat := range stats {
 		if !strings.HasSuffix(stat.Name, ".go") {
 			continue

@@ -31,6 +31,15 @@ func Test_check(t *testing.T) {
 		assert.Error(t, err)
 	})
 
+	t.Run("long title", func(t *testing.T) {
+		c := commit(long)
+		c.Author.Email = "test@yahoo.com"
+
+		err := check(c, nil)
+
+		assert.Error(t, err)
+	})
+
 	t.Run("long body", func(t *testing.T) {
 		err := check(commit("title\n"+long), nil)
 
@@ -112,7 +121,13 @@ func Test_repositoryChecks(t *testing.T) {
 }
 
 func commit(message string) *object.Commit {
-	return &object.Commit{Message: message}
+	return &object.Commit{
+		Message: message,
+		Author: object.Signature{
+			Name:  "Test",
+			Email: "test@gmail.com",
+		},
+	}
 }
 
 func fillCommits(cc []string, t *testing.T, r *git.Repository) {
@@ -133,11 +148,11 @@ func fillCommits(cc []string, t *testing.T, r *git.Repository) {
 		_, err = wt.Commit(commit, &git.CommitOptions{
 			Author: &object.Signature{
 				Name:  commit,
-				Email: commit,
+				Email: "test@gmail.com",
 			},
 			Committer: &object.Signature{
 				Name:  commit,
-				Email: commit,
+				Email: "test@gmail.com",
 			},
 		})
 		require.NoError(t, err)
