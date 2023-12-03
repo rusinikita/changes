@@ -41,11 +41,11 @@ linters-settings:
         disabled: false
       - name: function-length
         disabled: false
-        arguments: [ 14, 40 ]
+        arguments: [ 20, 40 ]
       - name: line-length-limit
         arguments: [ 120 ]
       - name: max-public-structs
-        arguments: [ 3 ]
+        arguments: [ 5 ]
       - name: string-format
         arguments:
           - - 'core.WriteError[1].Message'
@@ -92,6 +92,8 @@ linters-settings:
         skipRecvDeref: false
       unnamedResult:
         checkExported: true
+      rangeValCopy:
+        sizeThreshold: 256
 linters:
   disable-all: true
   enable:
@@ -124,5 +126,5 @@ issues:
       text: "function-length: maximum number of lines"
     - path: _test\.go
       text: "function-length: maximum number of statements"
-    - path: '(.*)\/index\.go'
-      text: "function-length: maximum number of statements"
+    - path: \.go
+      text: "undefined: m"

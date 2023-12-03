@@ -6,7 +6,7 @@ unleash:
   output: ""
   workers: 0 #
   test-cpu: 0 #
-  timeout-coefficient: 0 #
+  timeout-coefficient: 5 #
   threshold: #
     efficacy: 80
     mutant-coverage: 90

@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   golangci:
-    name: lint
+    name: golangci-lint
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -22,7 +22,7 @@ jobs:
       - name: golangci-lint
         uses: golangci/golangci-lint-action@v3
         with:
-          version: latest
+          version: v1.55.2
           only-new-issues: true
           # Optional: The mode to install golangci-lint. It can be 'binary' or 'goinstall'.
           # install-mode: "goinstall"
@@ -33,13 +33,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 20
+          fetch-depth: 0
+
       - uses: actions/setup-go@v4
         with:
           go-version: '1.21'
 
       - name: git-changes_check
-        run: go run cmd/custom/main.go
+        run: |
+          git branch -a
+          go run cmd/custom/main.go
 
   tests:
     name: tests
