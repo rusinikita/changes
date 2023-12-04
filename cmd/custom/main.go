@@ -6,18 +6,56 @@ import (
 	"log"
 	"strings"
 
-	"github.com/go-git/go-git/v5"
-	"github.com/go-git/go-git/v5/plumbing/object"
-	"github.com/go-git/go-git/v5/plumbing/storer"
+	"github.com/rusinikita/changes/git"
 )
 
 const (
-	maxTitleLen       = 40
-	maxFileChangesLen = 400
+	maxTitleLen       = 50
+	maxFileChangesLen = 180
 )
 
-func check(commit *object.Commit, stats object.FileStats) error {
+func main() {
+	if err := run(); err != nil {
+		log.Fatalln(err)
+	}
+
+	log.Println("ok")
+}
+
+func run() error {
+	change, err := git.GetChange()
+	if err != nil {
+		return err
+	}
+
+	return changesCheck(change)
+}
+
+func changesCheck(c git.Change) error {
+	commits, err := c.Commits()
+	if err != nil {
+		return err
+	}
+
+	for _, commit := range commits {
+		err = checkCommit(commit)
+		if err != nil {
+			return err
+		}
+	}
+
+	diff, err := c.FilesDiff()
+	if err != nil {
+		return err
+	}
+
+	return checkDiff(diff)
+}
+
+func checkCommit(commit git.Commit) error {
 	title := strings.SplitN(commit.Message, "\n", 2)[0] //nolint:revive
+
+	log.Println(title)
 
 	if strings.HasPrefix(title, "Merge") {
 		return nil
@@ -31,67 +69,19 @@ func check(commit *object.Commit, stats object.FileStats) error {
 		return fmt.Errorf("commit from work email '%s'", title)
 	}
 
-	for _, stat := range stats {
-		if !strings.HasSuffix(stat.Name, ".go") {
+	return nil
+}
+
+func checkDiff(diff []git.FileChange) error {
+	for _, file := range diff {
+		if !strings.HasSuffix(file.Path, ".go") {
 			continue
 		}
 
-		if stat.Addition > maxFileChangesLen {
-			return fmt.Errorf("file '%s' has to many changes in commit '%s'", stat.Name, title)
+		if file.Stats().Additions > maxFileChangesLen {
+			return fmt.Errorf("file '%s' has to many changes", file.Path)
 		}
 	}
 
 	return nil
-}
-
-func main() {
-	if err := run(); err != nil {
-		log.Fatalln(err)
-	}
-
-	log.Println("ok")
-}
-
-func run() error {
-	rep, _ := git.PlainOpenWithOptions(".", &git.PlainOpenOptions{
-		DetectDotGit:          true,
-		EnableDotGitCommonDir: true,
-	})
-
-	return repositoryChecks(rep)
-}
-
-type repository interface {
-	Log(o *git.LogOptions) (object.CommitIter, error)
-}
-
-func repositoryChecks(r repository) error {
-	commitIter, err := r.Log(&git.LogOptions{
-		All: false,
-	})
-	if err != nil {
-		return err
-	}
-
-	commitsHandled := 0
-	err = commitIter.ForEach(func(commit *object.Commit) error {
-		commitsHandled++
-		if commitsHandled > 10 {
-			return storer.ErrStop
-		}
-
-		stats, statsErr := commit.Stats()
-		if statsErr != nil {
-			return fmt.Errorf("stats %w", statsErr)
-		}
-
-		checkErr := check(commit, stats)
-		if checkErr != nil {
-			return checkErr
-		}
-
-		return nil
-	})
-
-	return err
 }
