@@ -4,6 +4,7 @@
 hero:
   enable: true
   weight: 10
+  template: hero
 
   backgroundImage:
     path: "images/templates/hero"
@@ -46,9 +47,10 @@ hero:
   info: "**Open Source** GPL 3.0 Licensed."
 
 # Features Grid
-features:
+featureGrid:
   enable: true
   weight: 20
+  template: feature grid
 
   title: What I can do?
   subtitle: This tool shares same idea as [Danger](https://danger.systems/ruby/) but simpler, faster and easier to use.
@@ -71,6 +73,7 @@ features:
       description: Create any custom checks without CI time sacrifice
 
 # Image compare
-image_compare:
+imageCompare:
   enable: false
   weight: 30
+  template: image compare
