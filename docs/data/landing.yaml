@@ -34,7 +34,7 @@ hero:
 #    boxShadow: true # default 'false' (excludes .svg images)
 #    rounded: true # round the image corners? default 'false' (excludes .svg images)
 
-  ctaButton:
+  cta2Button:
     icon: construction
     btnText: "Plans and progress"
     url: "/changes/docs/"
