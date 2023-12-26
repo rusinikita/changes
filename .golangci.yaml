@@ -115,6 +115,7 @@ linters:
     - wsl
     - whitespace
     - maintidx
+    - nolintlint
 issues:
   # See the dedicated "issues" documentation section.
   exclude-rules:
@@ -128,3 +129,5 @@ issues:
       text: "function-length: maximum number of statements"
     - path: \.go
       text: "undefined: m"
+    - path: \.go
+      text: "WriteString"
