@@ -15,16 +15,20 @@ mutants:
   arithmetic-base:
     enabled: true
   conditionals-boundary:
-    enabled: true
+    enabled: false
   conditionals-negation:
     enabled: true
   increment-decrement:
     enabled: true
   invert-negatives:
     enabled: true
+  invert-assignments:
+    enabled: true
   invert-logical:
     enabled: true
   invert-loopctrl:
     enabled: true
   invert-bitwise:
+    enabled: false
+  remove-self-assignments:
     enabled: true
