@@ -6,12 +6,15 @@ import (
 	"log"
 	"strings"
 
+	"github.com/rusinikita/changes/commit/subject"
+	"github.com/rusinikita/changes/commit/value"
+	"github.com/rusinikita/changes/errors"
 	"github.com/rusinikita/changes/git"
 )
 
 const (
-	maxTitleLen       = 50
 	maxFileChangesLen = 180
+	format            = `(type)((context))?: (title)`
 )
 
 func main() {
@@ -28,20 +31,34 @@ func run() error {
 		return err
 	}
 
-	return changesCheck(change)
+	commitParser, err := subject.NewParser(format, value.DefaultProperties)
+	if err != nil {
+		return err
+	}
+
+	t := tools{commitParser}
+
+	return changesCheck(change, t)
 }
 
-func changesCheck(c git.Change) error {
+type tools struct {
+	*subject.Parser
+}
+
+func changesCheck(c git.Change, t tools) error {
 	commits, err := c.Commits()
 	if err != nil {
 		return err
 	}
 
 	for _, commit := range commits {
-		err = checkCommit(commit)
-		if err != nil {
-			return err
-		}
+		commitErr := checkCommit(commit, t)
+
+		err = errors.Add(err, commitErr, commit.Subject())
+	}
+
+	if err != nil {
+		return err
 	}
 
 	diff, err := c.FilesDiff()
@@ -52,21 +69,22 @@ func changesCheck(c git.Change) error {
 	return checkDiff(diff)
 }
 
-func checkCommit(commit git.Commit) error {
-	title := strings.SplitN(commit.Message, "\n", 2)[0] //nolint:revive
+func checkCommit(commit git.Commit, t tools) error {
+	commitSubject := commit.Subject()
 
-	log.Println(title)
+	log.Println(commitSubject)
 
-	if strings.HasPrefix(title, "Merge") {
+	if strings.HasPrefix(commitSubject, "Merge") {
 		return nil
 	}
 
-	if len(title) > maxTitleLen {
-		return fmt.Errorf("too long title '%s'", title)
+	_, err := t.Parse(commitSubject)
+	if err != nil {
+		return err
 	}
 
 	if !strings.HasSuffix(commit.Author.Email, "gmail.com") {
-		return fmt.Errorf("commit from work email '%s'", title)
+		return fmt.Errorf("commit from work email '%s'", commitSubject)
 	}
 
 	return nil

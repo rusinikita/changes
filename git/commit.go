@@ -1,6 +1,7 @@
 package git
 
 import (
+	"strings"
 	"time"
 
 	"github.com/go-git/go-git/v5"
@@ -18,6 +19,10 @@ type Commit struct {
 	Committer Signature
 	// ParentsCount is count of the parent commits of the commit.
 	ParentsCount int
+}
+
+func (c Commit) Subject() string {
+	return strings.SplitN(c.Message, "\n", 2)[0] //nolint:revive
 }
 
 // Signature is used to identify who and when created a commit or tag.
