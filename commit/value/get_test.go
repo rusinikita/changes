@@ -1,6 +1,7 @@
 package value
 
 import (
+	"reflect"
 	"regexp"
 	"strings"
 	"testing"
@@ -131,7 +132,7 @@ func TestRegexp(t *testing.T) {
 
 func TestParse(t *testing.T) {
 	t.Run("unmarshall err", func(t *testing.T) {
-		m := mock.NewUnmarshal(nil, errors.New("test"))
+		m := newUnmarshal(nil, errors.New("test"))
 
 		v, err := Get(m)
 
@@ -140,11 +141,26 @@ func TestParse(t *testing.T) {
 	})
 
 	t.Run("default values", func(t *testing.T) {
-		m := mock.NewUnmarshal(map[string]propertyConf{}, nil)
+		m := newUnmarshal(map[string]propertyConf{}, nil)
 
 		v, err := Get(m)
 
 		assert.NoError(t, err)
 		assert.Equal(t, DefaultProperties, v)
 	})
+}
+
+func newUnmarshal(value any, err error) *mock.ConfMock {
+	return &mock.ConfMock{
+		UnmarshalFunc: func(key string, config any, defaultValue ...any) error {
+			if err != nil {
+				return err
+			}
+
+			rValue := reflect.ValueOf(config)
+			rValue.Elem().Set(reflect.ValueOf(value))
+
+			return nil
+		},
+	}
 }
