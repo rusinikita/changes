@@ -13,7 +13,7 @@ import (
 )
 
 const (
-	maxFileChangesLen = 180
+	maxFileChangesLen = 200
 	format            = `(type)((context))?: (title)`
 )
 
