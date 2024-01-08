@@ -33,6 +33,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
+          ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
 
       - uses: actions/setup-go@v4
@@ -41,8 +42,7 @@ jobs:
 
       - name: git-changes_check
         run: |
-          git branch -a
-          go run cmd/custom/main.go
+          go run cmd/changes/* check
 
   tests:
     name: tests
