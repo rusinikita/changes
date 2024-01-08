@@ -1,0 +1,12 @@
+commit:
+  format: '(type)((context))?: (title)'
+
+custom-rules:
+  - message: 'too big file change, more that 250 added lines'
+    func: 'changes.filter(change, change.stats().additions > 250)'
+
+  - message: 'commit with work email'
+    func: 'commits.filter(commit, !commit.author.email.endsWith("@gmail.com"))'
+
+  - message: 'draft page will not be shown'
+    func: 'changes.filter(c, c.path.endsWith("md") && c.chunks.exists(ch, ch.content.contains("draft:")))'
