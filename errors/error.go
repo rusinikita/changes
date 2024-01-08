@@ -88,7 +88,11 @@ type pathErr struct {
 }
 
 func (e *pathErr) Error() string {
-	return fmt.Sprintf("%s: %s", e.path, e.err)
+	if e.path == "" {
+		return "- " + e.err.Error()
+	}
+
+	return fmt.Sprintf("- %s: %s", e.path, e.err)
 }
 
 type multiErr struct {
@@ -107,4 +111,16 @@ func (e *multiErr) Error() string {
 	}
 
 	return sb.String()
+}
+
+func Len(err error) int {
+	if err == nil {
+		return 0
+	}
+
+	if e, ok := err.(*multiErr); ok {
+		return len(e.errs)
+	}
+
+	return 1
 }
