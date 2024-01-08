@@ -76,7 +76,7 @@ func Get(c conf.Conf) (Properties, error) {
 		values[Name(name)] = value
 	}
 
-	return values, vErrors
+	return values, errors.Prefix(vErrors, ValuesConfigKey)
 }
 
 func validateName(s string) error {

@@ -17,6 +17,9 @@ var _ Conf = &ConfMock{}
 //
 //		// make and configure a mocked Conf
 //		mockedConf := &ConfMock{
+//			GetStringFunc: func(key string, defaultValue ...string) string {
+//				panic("mock out the GetString method")
+//			},
 //			UnmarshalFunc: func(key string, config any, defaultValue ...any) error {
 //				panic("mock out the Unmarshal method")
 //			},
@@ -27,11 +30,21 @@ var _ Conf = &ConfMock{}
 //
 //	}
 type ConfMock struct {
+	// GetStringFunc mocks the GetString method.
+	GetStringFunc func(key string, defaultValue ...string) string
+
 	// UnmarshalFunc mocks the Unmarshal method.
 	UnmarshalFunc func(key string, config any, defaultValue ...any) error
 
 	// calls tracks calls to the methods.
 	calls struct {
+		// GetString holds details about calls to the GetString method.
+		GetString []struct {
+			// Key is the key argument value.
+			Key string
+			// DefaultValue is the defaultValue argument value.
+			DefaultValue []string
+		}
 		// Unmarshal holds details about calls to the Unmarshal method.
 		Unmarshal []struct {
 			// Key is the key argument value.
@@ -42,7 +55,47 @@ type ConfMock struct {
 			DefaultValue []any
 		}
 	}
+	lockGetString sync.RWMutex
 	lockUnmarshal sync.RWMutex
+}
+
+// GetString calls GetStringFunc.
+func (mock *ConfMock) GetString(key string, defaultValue ...string) string {
+	callInfo := struct {
+		Key          string
+		DefaultValue []string
+	}{
+		Key:          key,
+		DefaultValue: defaultValue,
+	}
+	mock.lockGetString.Lock()
+	mock.calls.GetString = append(mock.calls.GetString, callInfo)
+	mock.lockGetString.Unlock()
+	if mock.GetStringFunc == nil {
+		var (
+			sOut string
+		)
+		return sOut
+	}
+	return mock.GetStringFunc(key, defaultValue...)
+}
+
+// GetStringCalls gets all the calls that were made to GetString.
+// Check the length with:
+//
+//	len(mockedConf.GetStringCalls())
+func (mock *ConfMock) GetStringCalls() []struct {
+	Key          string
+	DefaultValue []string
+} {
+	var calls []struct {
+		Key          string
+		DefaultValue []string
+	}
+	mock.lockGetString.RLock()
+	calls = mock.calls.GetString
+	mock.lockGetString.RUnlock()
+	return calls
 }
 
 // Unmarshal calls UnmarshalFunc.

@@ -7,6 +7,7 @@ require (
 	github.com/go-git/go-git/v5 v5.10.0
 	github.com/go-playground/validator/v10 v10.16.0
 	github.com/google/cel-go v0.18.2
+	github.com/spf13/cobra v1.8.0
 	github.com/spf13/viper v1.18.2
 	github.com/stoewer/go-strcase v1.2.0
 	github.com/stretchr/testify v1.8.4
@@ -30,6 +31,7 @@ require (
 	github.com/go-playground/universal-translator v0.18.1 // indirect
 	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
+	github.com/inconshreveable/mousetrap v1.1.0 // indirect
 	github.com/jbenet/go-context v0.0.0-20150711004518-d14ea06fba99 // indirect
 	github.com/kevinburke/ssh_config v1.2.0 // indirect
 	github.com/leodido/go-urn v1.2.4 // indirect

@@ -3,11 +3,22 @@ package conf
 import (
 	"testing"
 
+	"github.com/go-playground/validator/v10"
+	"github.com/spf13/viper"
 	"github.com/stretchr/testify/assert"
 )
 
+func TestNew(t *testing.T) {
+	c, err := New("error")
+	assert.Error(t, err)
+	assert.Nil(t, c)
+}
+
 func Test_conf_Unmarshal(t *testing.T) {
-	c := New()
+	c := &conf{
+		Viper: viper.New(),
+		val:   validator.New(),
+	}
 
 	t.Run("error", func(t *testing.T) {
 		err := c.Unmarshal("some.key", "", "")

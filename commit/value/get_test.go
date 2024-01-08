@@ -157,8 +157,7 @@ func newUnmarshal(value any, err error) *mock.ConfMock {
 				return err
 			}
 
-			rValue := reflect.ValueOf(config)
-			rValue.Elem().Set(reflect.ValueOf(value))
+			reflect.ValueOf(config).Elem().Set(reflect.ValueOf(value))
 
 			return nil
 		},
