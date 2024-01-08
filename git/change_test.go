@@ -54,7 +54,11 @@ func TestFileChange_Stats(t *testing.T) {
 			},
 			{
 				Type:    Delete,
-				Content: strings.Repeat("line\n", 134),
+				Content: strings.Repeat("line\n", 130),
+			},
+			{
+				Type:    Delete,
+				Content: strings.Repeat("line\n", 4),
 			},
 			{
 				Type:    Add,
