@@ -8,6 +8,7 @@ import (
 	"github.com/stretchr/testify/require"
 	"golang.org/x/exp/maps"
 
+	"github.com/rusinikita/changes/change"
 	"github.com/rusinikita/changes/commit"
 	"github.com/rusinikita/changes/commit/value"
 	"github.com/rusinikita/changes/git"
@@ -21,9 +22,10 @@ func TestNew(t *testing.T) {
 	require.NoError(t, err)
 
 	tests := []struct {
-		name   string
-		script string
-		err    bool
+		name        string
+		script      string
+		err         bool
+		errContains string
 	}{
 		{
 			name:   "ok default value, custom value, diff usage",
@@ -31,9 +33,30 @@ func TestNew(t *testing.T) {
 			err:    false,
 		},
 		{
-			name:   "message or func is empty",
-			script: "",
+			name:   "ok commits return",
+			script: `commits.filter(c, c.title == c.custom)`,
+			err:    false,
+		},
+		{
+			name:   "ok changes return",
+			script: `changes.filter(c, c.path == "test")`,
+			err:    false,
+		},
+		{
+			name:   "unknown return type",
+			script: `["test"]`,
 			err:    true,
+		},
+		{
+			name:   "unknown return type",
+			script: `"test"`,
+			err:    true,
+		},
+		{
+			name:        "message or func is empty",
+			script:      "",
+			err:         true,
+			errContains: "message and func are required",
 		},
 		{
 			name:   "error: unknown variable usage",
@@ -63,6 +86,9 @@ func TestNew(t *testing.T) {
 
 			if test.err {
 				assert.Error(t, err)
+				if test.errContains != "" {
+					assert.ErrorContains(t, err, test.errContains)
+				}
 			} else {
 				assert.NoError(t, err)
 				assert.NotNil(t, s)
@@ -92,7 +118,7 @@ func TestScript_Run(t *testing.T) {
 			},
 		},
 	}
-	changes := []git.FileChange{
+	changes := []change.Change{
 		{
 			Path: "test",
 		},
@@ -143,12 +169,12 @@ func TestScript_Run(t *testing.T) {
 		{
 			name:     "changes single return",
 			script:   `changes.filter(script, script.path == "test.go")`,
-			expected: []git.FileChange{changes[1]},
+			expected: []change.Change{changes[1]},
 		},
 		{
 			name:     "changes list return",
 			script:   `changes.filter(script, script.path.size() > 3)`,
-			expected: []git.FileChange{changes[0], changes[1]},
+			expected: []change.Change{changes[0], changes[1]},
 		},
 		{
 			name:     "changes empty list return",
@@ -157,17 +183,7 @@ func TestScript_Run(t *testing.T) {
 		},
 		{
 			name:   "exec error",
-			script: `10/0`,
-			err:    true,
-		},
-		{
-			name:   "unsupported main return",
-			script: `"test"`,
-			err:    true,
-		},
-		{
-			name:   "unsupported main return",
-			script: `["test"]`,
+			script: `10/0 == 0`,
 			err:    true,
 		},
 	}

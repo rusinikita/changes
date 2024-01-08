@@ -5,14 +5,21 @@ import (
 	"time"
 
 	"github.com/google/cel-go/cel"
+	"github.com/google/cel-go/common/types/ref"
 	"github.com/google/cel-go/ext"
 
+	"github.com/rusinikita/changes/change"
 	"github.com/rusinikita/changes/commit"
 	"github.com/rusinikita/changes/commit/value"
 	"github.com/rusinikita/changes/git"
 )
 
-func newData(commits []commit.Commit, changes []git.FileChange) Data {
+var (
+	commitListType  = cel.ListType(cel.ObjectType("commit.Commit"))
+	changesListType = cel.ListType(cel.ObjectType("change.Change"))
+)
+
+func newData(commits []commit.Commit, changes []change.Change) Data {
 	return map[string]any{
 		"commits": commits,
 		"changes": changes,
@@ -21,28 +28,34 @@ func newData(commits []commit.Commit, changes []git.FileChange) Data {
 }
 
 func createEnv(props value.Properties) (*cel.Env, error) {
-	return cel.NewEnv(
+	env, err := cel.NewEnv(
 		ext.NativeTypes(
 			reflect.ValueOf(commit.Commit{}),
 			reflect.ValueOf(git.Signature{}),
-			reflect.ValueOf(git.FileChange{}),
+			reflect.ValueOf(git.Chunk{}),
+			reflect.ValueOf(change.Change{}),
+			reflect.ValueOf(git.Stat{}),
 		),
-		cel.Variable("commits", cel.ListType(cel.ObjectType("commit.Commit"))),
-		cel.Variable("changes", cel.ListType(cel.ObjectType("git.FileChange"))),
+		cel.Variable("commits", commitListType),
+		cel.Variable("changes", changesListType),
 		cel.Variable("now", cel.TimestampType),
 
 		customTypeProvider(props),
 	)
-}
+	if err != nil {
+		return nil, err
+	}
 
-// cel.Function("method",
-// cel.MemberOverload(
-// "test_biba_func",
-// []*cel.Type{cel.ObjectType("script.SomeStruct")},
-// cel.StringType,
-// cel.FunctionBinding(func(values ...ref.Val) ref.Val {
-// 	return types.String(values[0].Value().(SomeStruct).Method())
-// }),
-// // Provide the implementation using cel.FunctionBinding()
-// ),
-// ),
+	return env.Extend(
+		cel.Function("stats",
+			cel.MemberOverload(
+				"file_change_stats",
+				[]*cel.Type{cel.ObjectType("change.Change")},
+				cel.ObjectType("git.Stat"),
+				cel.UnaryBinding(func(value ref.Val) ref.Val {
+					return env.CELTypeAdapter().NativeToValue(git.FileChange(value.Value().(change.Change)).Stats())
+				}),
+			),
+		),
+	)
+}

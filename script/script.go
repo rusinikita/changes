@@ -7,9 +7,9 @@ import (
 	"github.com/google/cel-go/cel"
 	"github.com/google/cel-go/common/types/ref"
 
+	"github.com/rusinikita/changes/change"
 	"github.com/rusinikita/changes/commit"
 	"github.com/rusinikita/changes/errors"
-	"github.com/rusinikita/changes/git"
 )
 
 type Data map[string]any
@@ -34,14 +34,21 @@ func New(c Config, env *cel.Env) (*Script, error) {
 		return nil, errors.Prefix(issues.Err(), "func")
 	}
 
+	if err := checkOutType(ast.OutputType()); err != nil {
+		return nil, errors.Prefix(err, "func")
+	}
+
 	prg, err := env.Program(ast)
+	if err != nil {
+		return nil, errors.Prefix(err, "func")
+	}
 
 	script := &Script{
 		Program: prg,
 		message: c.Message,
 	}
 
-	return script, errors.Prefix(err, "func")
+	return script, nil
 }
 
 func (s *Script) Run(data Data) (any, error) {
@@ -55,8 +62,12 @@ func (s *Script) Run(data Data) (any, error) {
 		return v, nil
 	case []ref.Val:
 		return convertList(out, v)
+	case []change.Change:
+		return v, nil
+	case []commit.Commit:
+		return v, nil
 	default:
-		return nil, fmt.Errorf("only bool and list return supported, but `%T`", v)
+		return nil, fmt.Errorf("unsuported return `%s` `%T`", v, v)
 	}
 }
 
@@ -66,11 +77,27 @@ func convertList(out ref.Val, list []ref.Val) (any, error) {
 	}
 
 	switch item := list[0].Value().(type) {
-	case git.FileChange:
-		return out.ConvertToNative(reflect.TypeOf([]git.FileChange{}))
+	case change.Change:
+		return out.ConvertToNative(reflect.TypeOf([]change.Change{}))
 	case commit.Commit:
 		return out.ConvertToNative(reflect.TypeOf([]commit.Commit{}))
 	default:
-		return nil, fmt.Errorf("only commits and changes return list supported, but `%T`", item)
+		return nil, fmt.Errorf("unsuported return `%s` `%T list`", out.Value(), item)
 	}
+}
+
+func checkOutType(t *cel.Type) error {
+	if t.Kind() == cel.BoolKind {
+		return nil
+	}
+
+	if t.Kind() != cel.ListKind {
+		return fmt.Errorf("only bool and list return supported, but `%s`", t.TypeName())
+	}
+
+	if t.IsExactType(commitListType) || t.IsExactType(changesListType) {
+		return nil
+	}
+
+	return fmt.Errorf("only bool and list return supported, but `%s`", t.TypeName())
 }
