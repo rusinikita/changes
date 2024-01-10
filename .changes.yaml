@@ -1,7 +1,11 @@
 commit:
-  format: '(type)((context))?: (title)'
+  subject: '(type)((context))?: (title)'
 
-custom-rules:
+  values:
+    type:
+      allowed: [ feat, fix, ref ]
+
+check-functions:
   - message: 'too big file change, more that 250 added lines'
     func: 'changes.filter(change, change.stats().additions > 250)'
 
