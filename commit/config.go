@@ -10,7 +10,7 @@ import (
 
 const (
 	conventionalCommitFormat = "(type)((context))?(!)?: (title)"
-	formatKey                = "commit.format"
+	formatKey                = "commit.subject"
 )
 
 type Parser struct {

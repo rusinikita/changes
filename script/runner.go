@@ -12,7 +12,7 @@ type Runner interface {
 	Run(commits []commit.Commit, diff []change.Change) error
 }
 
-const scriptRulesKey = "custom-rules"
+const scriptRulesKey = "check-functions"
 
 type runner struct {
 	scripts []*Script
