@@ -8,8 +8,10 @@ lastmod: "2024-01-14T18:38:29+08:00"
 toc: true
 ---
 
-{{< alert context="info" text="This is not complete and good documentation. It's just reminders for early adopters.
-Quick support and communication in project issues." />}}
+{{< alert context="info" >}}
+This is not complete and good documentation. It's just reminders for early adopters.
+Quick support and communication in project issues.
+{{< /alert >}}
 
 ## Project folder
 
