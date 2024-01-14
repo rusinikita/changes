@@ -15,8 +15,17 @@ disable = false
 [params]
 
 [params.docs]
+title = "Changes"
 descriptions = true
 backToTop = true
 darkMode = true
 sidebarIcons = true
 titleIcon = true
+
+[params.footer]
+copyright = "© :YEAR: Nikita Rusin. Built with ❤️ and [**Lotus Docs**](https://github.com/colinwilson/lotusdocs)"
+version = true
+
+[params.social]
+github = "rusinikita/changes"
+
