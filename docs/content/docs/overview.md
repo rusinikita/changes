@@ -15,6 +15,6 @@ toc: true
 
 ## Current state
 
-Project in development. Documentation will be updated.
+Project in development.
 
-See [ADR's](/docs/adr/) for more information.
+See [architectural decision records](/docs/adr/) for more information.
