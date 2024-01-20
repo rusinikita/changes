@@ -7,7 +7,7 @@ commit:
 
 check-functions:
   - message: 'too big file change, more that 250 added lines'
-    func: 'changes.filter(change, change.stats().additions > 250)'
+    func: 'changes.filter(change, change.path.endsWith(".go") && change.stats().additions > 250)'
 
   - message: 'commit with work email'
     func: 'commits.filter(commit, !commit.author.email.endsWith("@gmail.com"))'

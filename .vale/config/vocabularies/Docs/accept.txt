@@ -1,0 +1,10 @@
+[rR]ebase
+
+(?i)cli
+cmd
+yaml
+sha
+toml
+(?i)GitLab
+(?i)GitHub
+(?i)dockerfile

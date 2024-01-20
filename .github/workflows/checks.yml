@@ -10,8 +10,8 @@ permissions:
   pull-requests: read
 
 jobs:
-  golangci:
-    name: golangci-lint
+  lint:
+    name: lint
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -26,6 +26,14 @@ jobs:
           only-new-issues: true
           # Optional: The mode to install golangci-lint. It can be 'binary' or 'goinstall'.
           # install-mode: "goinstall"
+
+      - name: vale
+        uses: errata-ai/vale-action@reviewdog
+        with:
+          reporter: github-pr-check
+          fail_on_error: true
+          files: docs/content/docs
+          filter_mode: file
 
   git-check:
     name: git-checks
@@ -64,12 +72,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: technote-space/get-diff-action@v6
+        with:
+          PATTERNS: |
+            **/*.go
       - uses: actions/setup-go@v4
+        if: env.GIT_DIFF_FILTERED
         with:
           go-version: '1.21'
-
       - name: gramlins-mutation-testing
         uses: go-gremlins/gremlins-action@v1
+        if: env.GIT_DIFF_FILTERED
         with:
           version: 'v0.5.0'
           args: ""

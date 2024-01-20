@@ -9,7 +9,7 @@ toc: true
 ---
 
 {{< alert context="info" >}}
-This is not complete and good documentation. It's just reminders for early adopters.
+Not complete and good documentation. Just reminders for first adopters.
 Quick support and communication in project issues.
 {{< /alert >}}
 
