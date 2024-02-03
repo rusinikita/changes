@@ -1,10 +1,18 @@
 [rR]ebase
 
 (?i)cli
-cmd
+(?i)cmd
 yaml
 sha
 toml
 (?i)GitLab
 (?i)GitHub
 (?i)dockerfile
+commitlint
+CEL
+DSL
+Jira
+bool
+exactly
+ns
+[fF]unctions

@@ -21,6 +21,7 @@ backToTop = true
 darkMode = true
 sidebarIcons = true
 titleIcon = true
+prism = true
 
 [params.footer]
 copyright = "© :YEAR: Nikita Rusin. Built with ❤️ and [**Lotus Docs**](https://github.com/colinwilson/lotusdocs)"
