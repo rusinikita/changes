@@ -32,7 +32,7 @@ var (
 				return
 			}
 
-			cmd.PrintErrln(err)
+			cmd.Println(err)
 			os.Exit(1) //nolint: revive
 		},
 	}

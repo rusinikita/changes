@@ -19,7 +19,7 @@ func main() {
 
 		config, err = conf.New(cfgFile)
 		if err != nil {
-			log.Fatalln("Can't get config:", err)
+			log.Println("File config not applied:", err)
 		}
 	}
 
