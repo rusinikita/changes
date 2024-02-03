@@ -2,16 +2,18 @@ package value
 
 import (
 	"regexp"
+	"strings"
 
 	"github.com/rusinikita/changes/conf"
 	"github.com/rusinikita/changes/errors"
 )
 
 const (
-	ErrorNameLen   = "value name must be 3 - 20 characters long"
-	ErrorNameChars = "value name must be only latin lowercase characters or -_"
-	NameMinLen     = 3
-	NameMaxLen     = 20
+	ErrorNameLen    = "value name must be 3 - 20 characters long"
+	ErrorNameChars  = "value name must be only latin lowercase characters or -_"
+	ErrorRegexpEnds = "must contain start `^` and end `$` for full line validation"
+	NameMinLen      = 3
+	NameMaxLen      = 20
 
 	ErrorValueEmpty = "regexp or allowed must be filled"
 	ErrorValueBoth  = "regexp and allowed can't be filled together"
@@ -131,6 +133,12 @@ func mapAllowed(allowed []string) map[string]struct{} {
 func mapRegex(r string) (*regexp.Regexp, error) {
 	if len(r) == 0 {
 		return nil, nil
+	}
+
+	r = strings.TrimSpace(r)
+
+	if !strings.HasPrefix(r, "^") || !strings.HasSuffix(r, "$") {
+		return nil, errors.New(ErrorRegexpEnds)
 	}
 
 	return regexp.Compile(r)
