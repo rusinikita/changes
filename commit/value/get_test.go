@@ -80,10 +80,26 @@ func Test_parseValue(t *testing.T) {
 		{
 			name: "fail:regex",
 			c: propertyConf{
-				Regexp: "123xyz[",
+				Regexp: "^123xyz[$",
 				MaxLen: 10,
 			},
 			wantErr: "missing closing ]",
+		},
+		{
+			name: "fail:regex_end",
+			c: propertyConf{
+				Regexp: "^123xyz",
+				MaxLen: 10,
+			},
+			wantErr: ErrorRegexpEnds,
+		},
+		{
+			name: "fail:regex_start",
+			c: propertyConf{
+				Regexp: "123xyz$",
+				MaxLen: 10,
+			},
+			wantErr: ErrorRegexpEnds,
 		},
 		{
 			name: "ok",
