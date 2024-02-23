@@ -4,6 +4,8 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+
+	"github.com/rusinikita/changes/errors"
 )
 
 func TestChange_ErrPrefix(t *testing.T) {
@@ -12,8 +14,8 @@ func TestChange_ErrPrefix(t *testing.T) {
 		PrevPath: "prev_test",
 	}
 
-	assert.Equal(t, "file/test", c.ErrPrefix())
+	assert.Equal(t, errors.FilesDiffGroup+"/test", c.ErrPrefix())
 
 	c.Path = ""
-	assert.Equal(t, "file/prev_test", c.ErrPrefix())
+	assert.Equal(t, errors.FilesDiffGroup+"/prev_test", c.ErrPrefix())
 }

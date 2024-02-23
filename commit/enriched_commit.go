@@ -14,5 +14,5 @@ type Commit struct {
 }
 
 func (c Commit) ErrPrefix() string {
-	return path.Join("commit", errors.StrToPathPrefix(c.Subject()))
+	return path.Join(errors.CommitGroup, c.Subject())
 }

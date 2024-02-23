@@ -3,7 +3,6 @@ package errors
 import (
 	"errors"
 	"fmt"
-	"path"
 	"strings"
 )
 
@@ -50,20 +49,18 @@ func Prefix(err error, dirs ...string) error {
 		return err
 	}
 
-	join := path.Join(dirs...)
-
 	switch e := err.(type) {
 	case *pathErr:
-		e.path = path.Join(join, e.path)
+		e.path = append(dirs, e.path...)
 
 	case *multiErr:
 		for i, pathErr := range e.errs {
-			e.errs[i].path = path.Join(join, pathErr.path)
+			e.errs[i].path = append(dirs, pathErr.path...)
 		}
 
 	default:
 		err = &pathErr{
-			path: join,
+			path: dirs,
 			err:  err,
 		}
 	}
@@ -83,16 +80,33 @@ func pathErrors(e error) []pathErr {
 }
 
 type pathErr struct {
-	path string
+	path []string
 	err  error
 }
 
-func (e *pathErr) Error() string {
-	if e.path == "" {
-		return "- " + e.err.Error()
+//nolint:revive
+func (e *pathErr) cutRoot() (first, second string, err error) {
+	switch len(e.path) {
+	case 0:
+		return "", "", e
+	case 1:
+		return e.path[0], "", e.err
+	case 2:
+		return e.path[0], e.path[1], e.err
 	}
 
-	return fmt.Sprintf("- %s: %s", e.path, e.err)
+	return e.path[0], e.path[1], &pathErr{
+		path: e.path[2:],
+		err:  e.err,
+	}
+}
+
+func (e *pathErr) Error() string {
+	if len(e.path) == 0 {
+		return e.err.Error()
+	}
+
+	return fmt.Sprintf("%s: %s", strings.Join(e.path, "/"), e.err)
 }
 
 type multiErr struct {
@@ -103,7 +117,7 @@ func (e *multiErr) Error() string {
 	sb := strings.Builder{}
 
 	for i, err := range e.errs {
-		sb.WriteString(err.Error())
+		sb.WriteString("- " + err.Error())
 
 		if i != len(e.errs)-1 {
 			sb.WriteString("\n")

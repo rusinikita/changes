@@ -38,7 +38,7 @@ func TestPrefix(t *testing.T) {
 		err := Prefix(testErr, "test")
 		err = Prefix(err, "test")
 
-		assert.EqualError(t, err, "- test/test: test")
+		assert.EqualError(t, err, "test/test: test")
 	})
 }
 

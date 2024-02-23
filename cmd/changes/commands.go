@@ -20,13 +20,13 @@ var (
 		Long: `A fast, flexible, yet simple tool for code review automation and changelog generation, 
 				built with love by Nikita Rusin and friends in Go.
                 Complete documentation is available at https://rusinikita.github.io/changes/`,
-		Run: func(cmd *cobra.Command, args []string) {},
+		Run: func(_ *cobra.Command, _ []string) {},
 	}
 	checkCmd = &cobra.Command{
 		Use:     "check",
 		Aliases: []string{"c", "ch"},
 		Short:   "Checks commit messages and files diff using rules from a config file",
-		Run: func(cmd *cobra.Command, args []string) {
+		Run: func(cmd *cobra.Command, _ []string) {
 			err := check(config)
 			if err == nil {
 				return
@@ -51,7 +51,7 @@ func check(config conf.Conf) (err error) {
 
 	gitChange, err := git.GetChange()
 	if err != nil {
-		return errors.Prefix(err, "git call")
+		return errors.Prefix(err, "git call", "gather changes")
 	}
 
 	commits, commitErr := gitChange.Commits()

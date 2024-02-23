@@ -3,6 +3,7 @@ package change
 import (
 	"path"
 
+	"github.com/rusinikita/changes/errors"
 	"github.com/rusinikita/changes/git"
 )
 
@@ -24,5 +25,5 @@ func (c Change) ErrPrefix() string {
 		p = c.PrevPath
 	}
 
-	return path.Join("file", p)
+	return path.Join(errors.FilesDiffGroup, p)
 }
