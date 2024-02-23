@@ -34,19 +34,35 @@ func Test_multiToTree(t *testing.T) {
 				path: gen(3),
 				err:  testErr,
 			},
+			{
+				path: []string{"1", "3"},
+				err:  testErr,
+			},
 		},
 	}
 
 	tree := multiToTree(err)
 
 	expected := OutputTree{
-		"1": map[string][]string{
-			"": {testErrStr},
-			"2": {
-				"3: test",
-				testErrStr,
-				testErrStr,
-				"3: test",
+		{
+			Name:     "1",
+			Messages: []string{testErrStr},
+			Groups: []Node{
+				{
+					Name: "2",
+					Messages: []string{
+						"3: test",
+						"3: test",
+						testErrStr,
+						testErrStr,
+					},
+				},
+				{
+					Name: "3",
+					Messages: []string{
+						testErrStr,
+					},
+				},
 			},
 		},
 	}

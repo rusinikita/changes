@@ -14,8 +14,8 @@ func TestChange_ErrPrefix(t *testing.T) {
 		PrevPath: "prev_test",
 	}
 
-	assert.Equal(t, errors.FilesDiffGroup+"/test", c.ErrPrefix())
+	assert.Equal(t, []string{errors.FilesDiffGroup, "test"}, c.ErrPrefix())
 
 	c.Path = ""
-	assert.Equal(t, errors.FilesDiffGroup+"/prev_test", c.ErrPrefix())
+	assert.Equal(t, []string{errors.FilesDiffGroup, "prev_test"}, c.ErrPrefix())
 }

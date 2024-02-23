@@ -1,24 +1,80 @@
 package errors
 
-const (
-	CommitGroup    = "commit"
-	FilesDiffGroup = "diff"
+import (
+	"strings"
+
+	"golang.org/x/exp/slices"
 )
 
-type OutputTree map[string]map[string][]string
+const (
+	CommitGroup    = "Commits"
+	FilesDiffGroup = "Changes"
+)
 
-func multiToTree(e multiErr) OutputTree {
-	r := OutputTree{}
+type OutputTree []Node
+
+type Node struct {
+	Name     string
+	Groups   []Node
+	Messages []string
+}
+
+func PrepareOutput(err error) OutputTree {
+	switch e := err.(type) {
+	case *multiErr:
+		return multiToTree(*e)
+	case *pathErr:
+		return multiToTree(multiErr{errs: []pathErr{*e}})
+	}
+
+	return OutputTree{{
+		Name:     "Error",
+		Messages: []string{err.Error()},
+	}}
+}
+
+func multiToTree(e multiErr) (result OutputTree) {
+	tree := map[string]map[string][]string{}
 
 	for _, err := range e.errs {
 		first, second, err := err.cutRoot()
 
-		if r[first] == nil {
-			r[first] = map[string][]string{}
+		if tree[first] == nil {
+			tree[first] = map[string][]string{}
 		}
 
-		r[first][second] = append(r[first][second], err.Error())
+		tree[first][second] = append(tree[first][second], err.Error())
 	}
 
-	return r
+	for root, groups := range tree {
+		node := Node{
+			Name: root,
+		}
+
+		for name, issues := range groups {
+			slices.Sort(issues)
+
+			if name == "" {
+				node.Messages = issues
+				continue
+			}
+
+			node.Groups = append(node.Groups, Node{
+				Name:     name,
+				Messages: issues,
+			})
+		}
+
+		slices.SortFunc(node.Groups, compare)
+
+		result = append(result, node)
+	}
+
+	slices.SortFunc(result, compare)
+
+	return result
+}
+
+func compare(a, b Node) int {
+	return strings.Compare(a.Name, b.Name)
 }

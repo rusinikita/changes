@@ -10,6 +10,7 @@ import (
 	"github.com/rusinikita/changes/conf"
 	"github.com/rusinikita/changes/errors"
 	"github.com/rusinikita/changes/git"
+	"github.com/rusinikita/changes/output"
 	"github.com/rusinikita/changes/script"
 )
 
@@ -32,7 +33,7 @@ var (
 				return
 			}
 
-			cmd.Println(err)
+			cmd.Println(output.TerminalOutput(errors.PrepareOutput(err)))
 			os.Exit(1) //nolint: revive
 		},
 	}
@@ -69,5 +70,5 @@ func check(config conf.Conf) (err error) {
 
 	err = errors.Add(err, runner.Run(enrichedCommits, change.Changes(diff)))
 
-	return errors.Prefix(err, "changes validation")
+	return err
 }

@@ -69,11 +69,11 @@ func addValidationResult(err error, msg string, result any) error {
 		err = errors.Add(err, errors.New(msg))
 	case []commit.Commit:
 		for _, c := range v {
-			err = errors.Add(err, errors.New(msg), c.ErrPrefix())
+			err = errors.Add(err, errors.New(msg), c.ErrPrefix()...)
 		}
 	case []change.Change:
 		for _, c := range v {
-			err = errors.Add(err, errors.New(msg), c.ErrPrefix())
+			err = errors.Add(err, errors.New(msg), c.ErrPrefix()...)
 		}
 	}
 
