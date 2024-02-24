@@ -16,3 +16,4 @@ bool
 exactly
 ns
 [fF]unctions
+check

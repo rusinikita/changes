@@ -7,6 +7,7 @@ unleash:
   workers: 0 #
   test-cpu: 0 #
   timeout-coefficient: 5 #
+  output-statuses: lctr
   threshold: #
     efficacy: 80
     mutant-coverage: 90

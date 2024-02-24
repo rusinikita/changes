@@ -35,7 +35,7 @@ changes check
 ## GitHub
 
 - Use `actions/checkout` and `actions/setup-go` to create environment
-- Call `go run github.com/rusinikita/changes/cmd/changes@570e84e check`
+- Call `go run github.com/rusinikita/changes/cmd/changes check`
 
 ```yaml
 git-check:
@@ -44,6 +44,7 @@ git-check:
   steps:
     - uses: actions/checkout@v4
       with:
+        # skip gh merge commit from diff
         ref: ${{ github.event.pull_request.head.sha }}
         fetch-depth: 0
 
@@ -51,9 +52,18 @@ git-check:
       with:
         go-version: '1.21'
 
-    - name: git-changes_check
+    - name: git-changes check
       run: |
-        go run github.com/rusinikita/changes/cmd/changes@570e84e check
+        go run github.com/rusinikita/changes/cmd/changes check --output=git-check.md
+
+    - name: post result comment
+      if: always() # post even if previous step failed
+      uses: thollander/actions-comment-pull-request@v2
+      with:
+        filePath: git-check.md
+        comment_tag: git-check
+        mode: recreate
+        create_if_not_exists: true
 ```
 
 ## Docker

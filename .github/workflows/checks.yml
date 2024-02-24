@@ -7,7 +7,7 @@ on:
 
 permissions:
   contents: read
-  pull-requests: read
+  pull-requests: write
 
 jobs:
   lint:
@@ -51,7 +51,16 @@ jobs:
 
       - name: git-changes_check
         run: |
-          go run cmd/changes/* check
+          go run cmd/changes/* check --output=git-check.md
+
+      - name: comment PR
+        if: always()
+        uses: thollander/actions-comment-pull-request@v2
+        with:
+          filePath: git-check.md
+          comment_tag: git-check
+          mode: recreate
+          create_if_not_exists: true
 
   tests:
     name: tests

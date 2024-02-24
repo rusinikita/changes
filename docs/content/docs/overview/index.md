@@ -34,13 +34,25 @@ check-functions:
 
 ### Output
 
-{{< alert text="In progress. Ugly CLI output. Make it better and add screenshot." />}}
+```shell
+Changes
+-------
+docs/content/docs/ADR/24.02-output-message.md
+- draft page will not be shown
+
+Commits
+-------
+12341324: test
+- type: value must be one of [fix ref feat]
+```
 
 ### Independent of platform
 
-{{< alert text="In progress. No warnings and markdown output. Screenshot and example setup for PR message posting" />}}
-
 You can use it locally, as a CI step and in combination with messages posting tools.
+
+{{< figure src="github-message.png" caption="An github PR comment" >}}
+
+[See working GitHub actions configuration]({{< ref "docs/mvp-usage#github" >}})
 
 ## Alternatives
 
@@ -52,7 +64,7 @@ tools for JS and Ruby community.
 1. yaml/toml configuration familiarity and simplicity
 2. One tool to rule. Set message format and use parsed values in diff validation and changelog generation
 3. Well-designed configuration and scripting DSL
-4. Best quality Go code maintainability and execution speed
+4. Go code maintainability and execution speed
 
 ## Current state
 

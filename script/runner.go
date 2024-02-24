@@ -35,7 +35,7 @@ func GetScriptsRunner(config conf.Conf, props value.Properties) (Runner, error) 
 
 	for _, c := range scriptConfigs {
 		script, scriptErr := New(c, env)
-		err = errors.Add(err, scriptErr, errors.StrToPathPrefix(c.Message))
+		err = errors.Add(err, scriptErr, c.Message)
 
 		if script != nil {
 			scripts = append(scripts, script)
@@ -51,7 +51,7 @@ func (r runner) Run(commits []commit.Commit, changes []change.Change) (err error
 	for _, script := range r.scripts {
 		result, runErr := script.Run(data)
 
-		err = errors.Add(err, runErr, "script", errors.StrToPathPrefix(script.message))
+		err = errors.Add(err, runErr, "script", script.message)
 
 		err = addValidationResult(err, script.message, result)
 	}
@@ -69,11 +69,11 @@ func addValidationResult(err error, msg string, result any) error {
 		err = errors.Add(err, errors.New(msg))
 	case []commit.Commit:
 		for _, c := range v {
-			err = errors.Add(err, errors.New(msg), c.ErrPrefix())
+			err = errors.Add(err, errors.New(msg), c.ErrPrefix()...)
 		}
 	case []change.Change:
 		for _, c := range v {
-			err = errors.Add(err, errors.New(msg), c.ErrPrefix())
+			err = errors.Add(err, errors.New(msg), c.ErrPrefix()...)
 		}
 	}
 

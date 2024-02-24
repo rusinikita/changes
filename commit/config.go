@@ -45,7 +45,7 @@ func (p Parser) Parse(commits []git.Commit) (enrichedCommits []Commit, err error
 			Values: values,
 		}
 
-		err = errors.Add(err, commitErr, enriched.ErrPrefix())
+		err = errors.Add(err, commitErr, enriched.ErrPrefix()...)
 
 		enrichedCommits = append(enrichedCommits, enriched)
 	}

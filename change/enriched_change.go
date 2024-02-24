@@ -1,8 +1,7 @@
 package change
 
 import (
-	"path"
-
+	"github.com/rusinikita/changes/errors"
 	"github.com/rusinikita/changes/git"
 )
 
@@ -18,11 +17,11 @@ func Changes(gitChanges []git.FileChange) []Change {
 	return result
 }
 
-func (c Change) ErrPrefix() string {
+func (c Change) ErrPrefix() []string {
 	p := c.Path
 	if p == "" {
 		p = c.PrevPath
 	}
 
-	return path.Join("file", p)
+	return []string{errors.FilesDiffGroup, p}
 }

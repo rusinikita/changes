@@ -10,6 +10,7 @@ import (
 	"github.com/rusinikita/changes/conf"
 	"github.com/rusinikita/changes/errors"
 	"github.com/rusinikita/changes/git"
+	"github.com/rusinikita/changes/output"
 	"github.com/rusinikita/changes/script"
 )
 
@@ -20,20 +21,30 @@ var (
 		Long: `A fast, flexible, yet simple tool for code review automation and changelog generation, 
 				built with love by Nikita Rusin and friends in Go.
                 Complete documentation is available at https://rusinikita.github.io/changes/`,
-		Run: func(cmd *cobra.Command, args []string) {},
+		Run: func(_ *cobra.Command, _ []string) {},
 	}
 	checkCmd = &cobra.Command{
 		Use:     "check",
 		Aliases: []string{"c", "ch"},
 		Short:   "Checks commit messages and files diff using rules from a config file",
-		Run: func(cmd *cobra.Command, args []string) {
+		Run: func(cmd *cobra.Command, _ []string) {
 			err := check(config)
-			if err == nil {
+			if err != nil {
+				defer os.Exit(1)
+			}
+
+			outputTree := errors.PrepareOutput(err)
+
+			cmd.Println(output.TerminalOutput(outputTree))
+
+			if outFile == "" {
 				return
 			}
 
-			cmd.Println(err)
-			os.Exit(1) //nolint: revive
+			err = os.WriteFile(outFile, []byte(output.MarkdownOutput(outputTree)), 0666)
+			if err != nil {
+				cmd.Println(err)
+			}
 		},
 	}
 )
@@ -51,7 +62,7 @@ func check(config conf.Conf) (err error) {
 
 	gitChange, err := git.GetChange()
 	if err != nil {
-		return errors.Prefix(err, "git call")
+		return errors.Prefix(err, "git call", "gather changes")
 	}
 
 	commits, commitErr := gitChange.Commits()
@@ -69,5 +80,5 @@ func check(config conf.Conf) (err error) {
 
 	err = errors.Add(err, runner.Run(enrichedCommits, change.Changes(diff)))
 
-	return errors.Prefix(err, "changes validation")
+	return err
 }

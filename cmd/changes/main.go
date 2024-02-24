@@ -9,6 +9,7 @@ import (
 )
 
 var (
+	outFile string
 	cfgFile string
 	config  conf.Conf
 )
@@ -29,6 +30,7 @@ func main() {
 		"config", "",
 		"path to config file (default is .changes.[yaml,toml,json])",
 	)
+	checkCmd.Flags().StringVarP(&outFile, "output", "o", "", "file path to write result in md")
 	rootCmd.AddCommand(checkCmd)
 
 	if err := rootCmd.Execute(); err != nil {
