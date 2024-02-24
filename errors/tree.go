@@ -20,6 +20,10 @@ type Node struct {
 }
 
 func PrepareOutput(err error) OutputTree {
+	if err == nil {
+		return nil
+	}
+
 	switch e := err.(type) {
 	case *multiErr:
 		return multiToTree(*e)

@@ -29,12 +29,22 @@ var (
 		Short:   "Checks commit messages and files diff using rules from a config file",
 		Run: func(cmd *cobra.Command, _ []string) {
 			err := check(config)
-			if err == nil {
+			if err != nil {
+				defer os.Exit(1)
+			}
+
+			outputTree := errors.PrepareOutput(err)
+
+			cmd.Println(output.TerminalOutput(outputTree))
+
+			if outFile == "" {
 				return
 			}
 
-			cmd.Println(output.TerminalOutput(errors.PrepareOutput(err)))
-			os.Exit(1) //nolint: revive
+			err = os.WriteFile(outFile, []byte(output.MarkdownOutput(outputTree)), 0666)
+			if err != nil {
+				cmd.Println(err)
+			}
 		},
 	}
 )
