@@ -1,15 +1,15 @@
 ---
 weight: 999
-title: "Mvp Usage"
-description: ""
-icon: "article"
+title: "Installation"
+description: "Local and CI setup"
+icon: "download"
 date: "2024-01-14T18:38:29+08:00"
 lastmod: "2024-01-14T18:38:29+08:00"
 toc: true
 ---
 
 {{< alert context="info" >}}
-Not complete and good documentation. Just reminders for first adopters.
+Not complete and good documentation. Just instruction for beta adopters.
 Quick support and communication in project issues.
 {{< /alert >}}
 

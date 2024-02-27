@@ -1,7 +1,7 @@
 ---
 weight: 1
 title: "Overview"
-description: ""
+description: "Project overview"
 icon: "help"
 date: "2023-11-19T21:16:54+02:00"
 lastmod: "2023-11-19T21:16:54+02:00"

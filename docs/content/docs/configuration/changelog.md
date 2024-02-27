@@ -1,5 +1,5 @@
 ---
-weight: 10
+weight: 13
 title: "Changelog"
 description: ""
 icon: "article"

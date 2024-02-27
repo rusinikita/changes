@@ -1,5 +1,5 @@
 ---
-weight: 999
+weight: 20000
 title: "ADR"
 description: "Architecture decision records"
 icon: "article"
