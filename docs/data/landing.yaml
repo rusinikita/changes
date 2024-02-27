@@ -13,64 +13,153 @@ hero:
       mobile: "gradient-mobile.webp"
 
   badge:
-   text: early development
-   color: primary # primary, secondary, success, danger, warning, info, light, dark
-   pill: false # boolean
-   soft: true # boolean
+    text: open beta
+    color: primary # primary, secondary, success, danger, warning, info, light, dark
+    pill: false # boolean
+    soft: true # boolean
 
-#  titleLogo:
-#   path: "images/logos"
-#   filename: "title_logo.png"
-#   alt: "Lotus Docs Logo"
-#   height: 80px
+  #  titleLogo:
+  #   path: "images/logos"
+  #   filename: "title_logo.png"
+  #   alt: "Lotus Docs Logo"
+  #   height: 80px
 
   title: "Changes"
-  subtitle: A **fast** and **feature-reach** Pull Request git changes validation tool written in **Go**. Spend less time on DoD validation.
+  subtitle: A **simple** and **fast** pull request validation tool written in **Go**. Spend less time on agreements validation.
 
-#  image:
-#    path: "images" # path to image under configured assets directory. default 'images'
-#    filename: "lotus_docs_screenshot.png" # filename of your hero image (including file extension)
-#    alt: "Lotus Docs Screenshot" # Optional but recommended
-#    boxShadow: true # default 'false' (excludes .svg images)
-#    rounded: true # round the image corners? default 'false' (excludes .svg images)
+  image: # 5
+    path: "images"
+    filename: "github-message.png"
+    alt: "Github PR validation message screenshot" # Optional but recommended
+    boxShadow: true # default 'false' (excludes .svg images)
+    rounded: true # round the image corners? default 'false' (excludes .svg images)
+  #  image:
+  #    path: "images" # path to image under configured assets directory. default 'images'
+  #    filename: "lotus_docs_screenshot.png" # filename of your hero image (including file extension)
+  #    alt: "Lotus Docs Screenshot" # Optional but recommended
+  #    boxShadow: true # default 'false' (excludes .svg images)
+  #    rounded: true # round the image corners? default 'false' (excludes .svg images)
 
   cta2Button:
     icon: construction
-    btnText: "Plans and progress"
+    btnText: "Go to docs"
     url: "/changes/docs/"
 
-#  cta2Button:
-#    icon: construction
-#    btnText: "In Development"
-#    url: "https://github.com/colinwilson/lotusdocs"
+  #  cta2Button:
+  #    icon: construction
+  #    btnText: "In Development"
+  #    url: "https://github.com/colinwilson/lotusdocs"
 
   info: "**Open Source** GPL 3.0 Licensed."
+
+commit-feature:
+  enable: true
+  weight: 11
+  template: image text
+  title: Commit message format parsing
+  subtitle: Simple configuration for any style validation
+  list:
+    - text: Much simpler than over 200 symbols `regexp`
+      icon: done
+
+    - text: Verbose validation messages
+      icon: done
+
+    - text: Highly customizable
+      icon: done
+
+    - text: Conventional commit by default
+      icon: done
+  ctaButton:
+    text: Learn more
+    url: "/changes/docs/configuration/commit/"
+  image:
+    path: "images"
+    filename: "commit-config.png"
+    alt: "Google LightHouse 100% Illustration" # Optional but recommended
+  imgOrder:
+    desktop: 1
+    mobile: 2
+
+functions-feature:
+  enable: true
+  weight: 12
+  template: image text
+  title: Team agreements validation scripting
+  subtitle: CEL functions can validate parsed commit message params and files contend/diff
+  list:
+    - text: Secure - just expressions, no turing complete
+      icon: done
+
+    - text: Fast and memory efficient - no VM or sandbox
+      icon: done
+
+    - text: Similar to expressions in JS, python, Go, Java and C
+      icon: done
+
+    - text: Can express almost any agreement on top of git changes
+      icon: done
+  ctaButton:
+    text: Learn more
+    url: "/changes/docs/configuration/functions/"
+  image:
+    path: "images"
+    filename: "functions-config.png"
+    alt: "Google LightHouse 100% Illustration" # Optional but recommended
+  imgOrder:
+    desktop: 2
+    mobile: 2
+
+simplicity-feature:
+  enable: true
+  weight: 13
+  template: image text
+  title: Simplicity
+  subtitle: Simple local testing and combination with other tools
+  list:
+    - text: No GitHub/GitLab/etc API, no git dependency. Runs fast and independently
+      icon: done
+
+    - text: Local testing. Locally it runs on last 10 commits.
+      icon: done
+
+    - text: Console and markdown file output can be combined with other tools.
+      icon: done
+
+    - text: Can express almost any agreement on top of git changes
+      icon: done
+  ctaButton:
+    text: Learn more
+    url: "/changes/docs/mvp-usage/#github"
+  image:
+    path: "images"
+    filename: "github-message.png"
+    alt: "Google LightHouse 100% Illustration" # Optional but recommended
+  imgOrder:
+    desktop: 1
+    mobile: 2
 
 # Features Grid
 featureGrid:
   enable: true
-  weight: 20
+  weight: 21
   template: feature grid
 
-  title: What I can do?
-  subtitle: This tool shares same idea as [Danger](https://danger.systems/ruby/) but simpler, faster and easier to use.
+  title: Near future features
+  subtitle: This tool shares same idea as [Danger](https://danger.systems/ruby/) and could be simpler, faster and easier to use for devs outside of JS and Ruby.
 
   items:
-    - title: Commit message checks
-      icon: subject
-      description: Validate commit messages format. Conventional Commits or custom.
-
     - title: Changelog
       icon: history
-      description: Generate changelog from Git history.
+      description: Generate changelog from Git history. Validation and changelog in same tool.
 
-    - title: Git changes validation
+    - title: Common validation params
       icon: warning
-      description: Lots of checks upon PR changes. Max changes, access-list secured files, no merge commits, target branch, etc
+      description: Lots of checks upon PR changes. Max changes, access-list secured files, no merge commits, repeated messages, etc
 
-    - title: Lua support
-      icon: settings
-      description: Create any custom checks without CI time sacrifice
+    - title: GitHub action
+      icon: hub
+      description: It's convenient fo GitHub users.
 
 # Image compare
 imageCompare:
