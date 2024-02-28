@@ -1,0 +1,121 @@
+<head>
+    <meta charset="utf-8"/>
+    <title>
+        {{- $url := replace .Permalink ( printf "%s" .Site.BaseURL) "" }}
+        {{- if eq $url "/" }}
+        {{- .Site.Title }}
+        {{- else }}
+        {{- if .Params.heading }}
+        {{ .Params.heading }}
+        {{ else }}
+        {{- if eq .Title .Site.Title }}
+        {{- .Title }}
+        {{- else }}
+        {{- .Title }} | {{ .Site.Params.docs.Title | default (.Site.Title) }}
+        {{- end }}
+        {{- end }}
+        {{- end -}}
+    </title>
+    {{- if not hugo.IsProduction }}
+    <meta content="noindex" name="robots">
+    {{- end }}
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    {{- with .Description | default ($.Param "description") }}
+    <meta content="{{ . }}" name="description">
+    {{- end }}
+    <meta content="{{- .Site.Params.Keywords }}" name="keywords"/>
+    <meta content="{{- .Site.Params.Author.Name }}" name="author"/>
+    <meta content="{{- .Site.Params.Author.Website }}" name="website"/>
+    <meta content="{{- .Site.Params.Version }}" name="version"/>
+
+    <!-- favicon -->
+    {{ block "favicon" . }}{{ partialCached (printf "%s/%s" ($.Scratch.Get "pathName") "head/favicon.html") . }}{{ end
+    }}
+    {{- partial (printf "%s/%s" ($.Scratch.Get "pathName") "head/opengraph") . }}
+    {{- partial (printf "%s/%s" ($.Scratch.Get "pathName") "head/twitter_cards") . }}
+    <!-- Dark Mode -->
+    {{ if eq .Site.Params.docs.darkMode true -}}
+    {{ $darkModeInit := resources.Get (printf "/%s/%s" ($.Scratch.Get "pathName") "js/darkmode-init.js") | js.Build |
+    minify -}}
+    <script>{
+        {
+            $darkModeInit.Content | safeJS
+        }
+    }</script>
+    {{ end -}}
+    <!-- FlexSearch -->
+    {{ if or (not (isset .Site.Params.flexsearch "enabled")) (eq .Site.Params.flexsearch.enabled true) -}}
+    {{ if and (.Site.Params.docsearch.appID) (.Site.Params.docsearch.apiKey) -}}
+    {{ else }}
+    {{ $flexSearch := resources.Get (printf "/%s/%s" ($.Scratch.Get "pathName") "js/flexsearch.bundle.js") }}
+    {{- if not .Site.IsServer }}
+    {{ $flexSearch := $flexSearch | minify | fingerprint "sha384" }}
+    <script crossorigin="anonymous" integrity="{{ $flexSearch.Data.Integrity }}" src="{{ $flexSearch.Permalink }}"
+            type="text/javascript"></script>
+    {{ else }}
+    <script src="{{ $flexSearch.Permalink }}" type="text/javascript"></script>
+    {{ end }}
+    {{ end }}
+    {{ end }}
+    <!-- Google Fonts -->
+    {{- partialCached "google-fonts" . }}
+    <!-- Custom CSS -->
+    {{- $options := dict "enableSourceMap" true }}
+    {{- if hugo.IsProduction}}
+    {{- $options := dict "enableSourceMap" false "outputStyle" "compressed" }}
+    {{- end }}
+    {{- $style := resources.Get (printf "/%s/%s" ($.Scratch.Get "pathName") "scss/style.scss") }}
+    {{- $style = $style | resources.ExecuteAsTemplate (printf "/%s/%s" ($.Scratch.Get "pathName") "scss/style.scss") . |
+    resources.ToCSS $options }}
+    {{- if hugo.IsProduction }}
+    {{- $style = $style | minify | fingerprint "sha384" }}
+    {{- end -}}
+    <link -}} crossorigin="anonymous" end href="{{ $style.RelPermalink }}" hugo.IsProduction
+          if rel="stylesheet" {{ {{ }}integrity="{{ $style.Data.Integrity }}">
+    <!-- Katex CSS -->
+    {{- if .Params.katex -}}
+    {{- $options := dict "enableSourceMap" true }}
+    {{- if hugo.IsProduction}}
+    {{- $options := dict "enableSourceMap" false "outputStyle" "compressed" }}
+    {{- end -}}
+    {{- $katexCSS := resources.Get (printf "/%s/%s" ($.Scratch.Get "pathName") "scss/katex.scss") }}
+    {{- $katexCSS = $katexCSS | resources.ExecuteAsTemplate (printf "/%s/%s" ($.Scratch.Get "pathName")
+    "scss/katex.scss") . | resources.ToCSS $options }}
+    {{- if hugo.IsProduction }}
+    {{- $katexCSS = $katexCSS | minify | fingerprint "sha384" }}
+    {{- end -}}
+    <link -}} crossorigin="anonymous" end href="{{ $katexCSS.RelPermalink }}" hugo.IsProduction
+          if rel="stylesheet" {{ {{ }}integrity="{{ $katexCSS.Data.Integrity }}">
+    {{- end -}}
+    <!-- Katex JS -->
+    {{- if .Params.katex -}}
+    {{ $katex := resources.Get (printf "/%s/%s" ($.Scratch.Get "pathName") "js/katex.js") }}
+    {{ $katexAutoRender := resources.Get (printf "/%s/%s" ($.Scratch.Get "pathName") "js/auto-render.js") }}
+    {{ if hugo.IsProduction }}
+    {{ $katex = $katex | minify | fingerprint "sha384" }}
+    {{ $katexAutoRender = $katexAutoRender | minify | fingerprint "sha384" }}
+    {{- end -}}
+    <script -}} defer end hugo.IsProduction if src="{{ $katex.RelPermalink }}" {{ {{
+            }}integrity="{{ $katex.Data.Integrity }}"></script>
+    <script -}} defer end hugo.IsProduction
+            if src="{{ $katexAutoRender.RelPermalink }}" {{ {{ }}integrity="{{ $katexAutoRender.Data.Integrity }}"></script>
+    {{ end -}}
+
+    <!-- Katex Config -->
+    {{ if .Params.katex }}
+    {{- partialCached (printf "%s/%s" ($.Scratch.Get "pathName") "footer/katex.html") . -}}
+    {{ end }}
+    <!-- Plausible Analytics Config -->
+    {{- if not .Site.IsServer }}
+    {{ if and (.Site.Params.plausible.scriptURL | default "https://plausible.io") (.Site.Params.plausible.dataDomain)
+    -}}
+    {{- partialCached (printf "%s/%s" ($.Scratch.Get "pathName") "head/plausible") . }}
+    {{- end -}}
+    {{- end -}}
+    <!-- Google Analytics v4 Config -->
+    {{- if not .Site.IsServer }}
+    {{- if .Site.GoogleAnalytics }}
+    {{- template "_internal/google_analytics.html" . -}}
+    {{- end -}}
+    {{- end -}}
+</head>
