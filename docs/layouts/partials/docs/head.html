@@ -17,11 +17,11 @@
         {{- end -}}
     </title>
     {{- if not hugo.IsProduction }}
-    <meta content="noindex" name="robots">
+    <meta name="robots" content="noindex">
     {{- end }}
-    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     {{- with .Description | default ($.Param "description") }}
-    <meta content="{{ . }}" name="description">
+    <meta name="description" content="{{ . }}">
     {{- end }}
     <meta content="{{- .Site.Params.Keywords }}" name="keywords"/>
     <meta content="{{- .Site.Params.Author.Name }}" name="author"/>
@@ -50,10 +50,10 @@
     {{ $flexSearch := resources.Get (printf "/%s/%s" ($.Scratch.Get "pathName") "js/flexsearch.bundle.js") }}
     {{- if not .Site.IsServer }}
     {{ $flexSearch := $flexSearch | minify | fingerprint "sha384" }}
-    <script crossorigin="anonymous" integrity="{{ $flexSearch.Data.Integrity }}" src="{{ $flexSearch.Permalink }}"
-            type="text/javascript"></script>
+    <script type="text/javascript" src="{{ $flexSearch.Permalink }}" integrity="{{ $flexSearch.Data.Integrity }}"
+            crossorigin="anonymous"></script>
     {{ else }}
-    <script src="{{ $flexSearch.Permalink }}" type="text/javascript"></script>
+    <script type="text/javascript" src="{{ $flexSearch.Permalink }}"></script>
     {{ end }}
     {{ end }}
     {{ end }}
@@ -70,8 +70,8 @@
     {{- if hugo.IsProduction }}
     {{- $style = $style | minify | fingerprint "sha384" }}
     {{- end -}}
-    <link -}} crossorigin="anonymous" end href="{{ $style.RelPermalink }}" hugo.IsProduction
-          if rel="stylesheet" {{ {{ }}integrity="{{ $style.Data.Integrity }}">
+    <link rel="stylesheet" href="{{ $style.RelPermalink }}" {{ if hugo.IsProduction
+          }}integrity="{{ $style.Data.Integrity }}" {{ end -}} crossorigin="anonymous">
     <!-- Katex CSS -->
     {{- if .Params.katex -}}
     {{- $options := dict "enableSourceMap" true }}
@@ -84,8 +84,8 @@
     {{- if hugo.IsProduction }}
     {{- $katexCSS = $katexCSS | minify | fingerprint "sha384" }}
     {{- end -}}
-    <link -}} crossorigin="anonymous" end href="{{ $katexCSS.RelPermalink }}" hugo.IsProduction
-          if rel="stylesheet" {{ {{ }}integrity="{{ $katexCSS.Data.Integrity }}">
+    <link rel="stylesheet" href="{{ $katexCSS.RelPermalink }}" {{ if hugo.IsProduction
+          }}integrity="{{ $katexCSS.Data.Integrity }}" {{ end -}} crossorigin="anonymous">
     {{- end -}}
     <!-- Katex JS -->
     {{- if .Params.katex -}}
@@ -95,10 +95,10 @@
     {{ $katex = $katex | minify | fingerprint "sha384" }}
     {{ $katexAutoRender = $katexAutoRender | minify | fingerprint "sha384" }}
     {{- end -}}
-    <script -}} defer end hugo.IsProduction if src="{{ $katex.RelPermalink }}" {{ {{
-            }}integrity="{{ $katex.Data.Integrity }}"></script>
-    <script -}} defer end hugo.IsProduction
-            if src="{{ $katexAutoRender.RelPermalink }}" {{ {{ }}integrity="{{ $katexAutoRender.Data.Integrity }}"></script>
+    <script src="{{ $katex.RelPermalink }}" {{ if hugo.IsProduction }}integrity="{{ $katex.Data.Integrity }}" {{ end -}}
+            defer></script>
+    <script src="{{ $katexAutoRender.RelPermalink }}" {{ if hugo.IsProduction
+            }}integrity="{{ $katexAutoRender.Data.Integrity }}" {{ end -}} defer></script>
     {{ end -}}
 
     <!-- Katex Config -->

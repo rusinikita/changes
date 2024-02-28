@@ -32,8 +32,8 @@
     {{- if hugo.IsProduction }}
     {{- $style = $style | minify | fingerprint "sha384" }}
     {{- end -}}
-    <link -}} end href="{{ $style.RelPermalink }}" hugo.IsProduction if
-          rel="stylesheet" {{ {{ }}integrity="{{ $style.Data.Integrity }}"/>
+    <link rel="stylesheet" href="{{ $style.RelPermalink }}" {{ if hugo.IsProduction
+          }}integrity="{{ $style.Data.Integrity }}" {{ end -}}/>
     <!-- Bootstrap JS -->
     {{ $js := resources.Get "js/bootstrap.js" }}
     {{ $params := dict }}
@@ -43,18 +43,18 @@
     {{ if hugo.IsProduction }}
     {{ $js = $js | fingerprint "sha384" }}
     {{ end }}
-    <script -}} defer end hugo.IsProduction if src="{{ $js.RelPermalink }}" {{ {{
-            }}integrity="{{ $js.Data.Integrity }}"></script>
+    <script src="{{ $js.RelPermalink }}" {{ if hugo.IsProduction }}integrity="{{ $js.Data.Integrity }}" {{ end -}}
+            defer></script>
     <!-- Image Compare Viewer -->
     {{ if ($.Scratch.Get "image_compare_enabled") }}
     {{ $imagecompare := resources.Get "js/image-compare-viewer.min.js" }}
     {{- if not .Site.IsServer }}
     {{- $js := (slice $imagecompare) | resources.Concat "/js/image-compare.js" | minify | fingerprint "sha384" }}
-    <script integrity="{{ $js.Data.Integrity }}" src="{{ $js.Permalink }}" type="text/javascript"></script>
+    <script type="text/javascript" src="{{ $js.Permalink }}" integrity="{{ $js.Data.Integrity }}"></script>
     {{- else }}
     {{- $js := (slice $imagecompare) | resources.Concat "/js/image-compare.js" }}
-    <script end hugo.IsProduction if src="{{ $js.Permalink }}" type="text/javascript"
-            {{ {{ }} }}integrity="{{ $js.Data.Integrity }}"></script>
+    <script type="text/javascript" src="{{ $js.Permalink }}" {{ if hugo.IsProduction
+            }}integrity="{{ $js.Data.Integrity }}" {{ end }}></script>
     {{- end }}
     {{- end }}
     <!-- Plausible Analytics Config -->
