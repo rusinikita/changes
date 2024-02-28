@@ -33,7 +33,7 @@ jobs:
           reporter: github-pr-check
           fail_on_error: true
           files: docs/content/docs
-          filter_mode: file
+          filter_mode: added
 
   git-check:
     name: git-checks
