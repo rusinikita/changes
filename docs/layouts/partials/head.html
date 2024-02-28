@@ -1,0 +1,72 @@
+<head>
+    <meta charset="utf-8"/>
+    <title>{{- .Site.Title }}</title>
+    {{- if not hugo.IsProduction }}
+    <meta content="noindex" name="robots">
+    {{- end }}
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="{{- .Site.Params.Description }}" name="description"/>
+    <meta content="{{- .Site.Params.Keywords }}" name="keywords"/>
+    <meta content="{{- .Site.Params.Author.Name }}" name="author"/>
+    <meta content="{{- .Site.Params.Author.Website }}" name="website"/>
+    <meta content="{{- .Site.Params.Version }}" name="version"/>
+    <meta content="{{- .Site.Title }}" property="og:title">
+    <meta content="{{- .Site.Params.Description }}" property="og:description">
+    <meta content="{{- .Site.Params.Author.Name }}" property="og:site_name">
+    <meta content="{{- .Site.Params.Author.Website }}" property="og:url">
+    <meta content="summary_large_image" name="twitter:card">
+    <meta content="{{- .Site.Title }}" name="twitter:title">
+    <meta content="{{- .Site.Params.Description }}" name="twitter:description">
+    <meta content="@rusin_nikita" name="twitter:site">
+    <!-- favicon -->
+    {{ block "head/favicon" . }}{{ partialCached "head/favicon.html" . }}{{ end }}
+    <!-- Google Fonts -->
+    {{- partial "google-fonts" . }}
+    <!-- Custom CSS -->
+    {{- $options := dict "enableSourceMap" true }}
+    {{- if hugo.IsProduction}}
+    {{- $options := dict "enableSourceMap" false "outputStyle" "compressed" }}
+    {{- end }}
+    {{- $style := resources.Get "/scss/style.scss" }}
+    {{- $style = $style | resources.ExecuteAsTemplate "/scss/style.scss" . | resources.ToCSS $options }}
+    {{- if hugo.IsProduction }}
+    {{- $style = $style | minify | fingerprint "sha384" }}
+    {{- end -}}
+    <link -}} end href="{{ $style.RelPermalink }}" hugo.IsProduction if
+          rel="stylesheet" {{ {{ }}integrity="{{ $style.Data.Integrity }}"/>
+    <!-- Bootstrap JS -->
+    {{ $js := resources.Get "js/bootstrap.js" }}
+    {{ $params := dict }}
+    {{ $sourceMap := cond hugo.IsProduction "" "inline" }}
+    {{ $opts := dict "sourceMap" $sourceMap "minify" hugo.IsProduction "target" "es2018" "params" $params }}
+    {{ $js = $js | js.Build $opts }}
+    {{ if hugo.IsProduction }}
+    {{ $js = $js | fingerprint "sha384" }}
+    {{ end }}
+    <script -}} defer end hugo.IsProduction if src="{{ $js.RelPermalink }}" {{ {{
+            }}integrity="{{ $js.Data.Integrity }}"></script>
+    <!-- Image Compare Viewer -->
+    {{ if ($.Scratch.Get "image_compare_enabled") }}
+    {{ $imagecompare := resources.Get "js/image-compare-viewer.min.js" }}
+    {{- if not .Site.IsServer }}
+    {{- $js := (slice $imagecompare) | resources.Concat "/js/image-compare.js" | minify | fingerprint "sha384" }}
+    <script integrity="{{ $js.Data.Integrity }}" src="{{ $js.Permalink }}" type="text/javascript"></script>
+    {{- else }}
+    {{- $js := (slice $imagecompare) | resources.Concat "/js/image-compare.js" }}
+    <script end hugo.IsProduction if src="{{ $js.Permalink }}" type="text/javascript"
+            {{ {{ }} }}integrity="{{ $js.Data.Integrity }}"></script>
+    {{- end }}
+    {{- end }}
+    <!-- Plausible Analytics Config -->
+    {{- if not .Site.IsServer }}
+    {{ if and (.Site.Params.plausible.scriptURL) (.Site.Params.plausible.dataDomain) -}}
+    {{- partialCached "head/plausible" . }}
+    {{- end -}}
+    {{- end -}}
+    <!-- Google Analytics v4 Config -->
+    {{- if not .Site.IsServer }}
+    {{- if .Site.GoogleAnalytics }}
+    {{- template "_internal/google_analytics.html" . -}}
+    {{- end -}}
+    {{- end -}}
+</head>
