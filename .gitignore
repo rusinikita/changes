@@ -25,3 +25,4 @@ go.work
 docs/resources/_gen
 docs/public
 public
+dist
