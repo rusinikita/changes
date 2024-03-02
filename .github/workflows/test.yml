@@ -19,4 +19,4 @@ jobs:
           # skip merge commit
           ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
-      - uses: rusinikita/changes-action@v0.1
+      - uses: rusinikita/changes-action@v0.2
