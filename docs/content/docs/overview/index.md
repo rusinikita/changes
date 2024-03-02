@@ -52,7 +52,7 @@ You can use it locally, as a CI step and in combination with messages posting to
 
 {{< figure src="github-message.png" caption="An github PR comment" >}}
 
-[See working GitHub actions configuration]({{< ref "docs/mvp-usage#github" >}})
+[See working GitHub actions configuration]({{< ref "docs/install#github" >}})
 
 ## Alternatives
 

@@ -8,31 +8,54 @@ lastmod: "2024-01-14T18:38:29+08:00"
 toc: true
 ---
 
-{{< alert context="info" >}}
-Not complete and good documentation. Just instruction for beta adopters.
-Quick support and communication in project issues.
-{{< /alert >}}
+## Go users
+
+```shell
+go install github.com/rusinikita/changes/cmd/changes@latest
+```
+
+## Homebrew users
+
+```shell
+brew tap rusinikita/tap
+brew install rusinikita/tap/devex
+```
+
+## Binaries
+
+###### One line installer
+```shell
+curl -sSfL https://raw.githubusercontent.com/rusinikita/changes/master/install.sh | sh -s -- -b ~/bin latest
+```
+
+- `-b` flag - folder to place binary. Leave `~/bin` or replace with any folder under `$PATH` works.
+- `latest` argument - version to install. Look at [releases](https://github.com/rusinikita/changes/releases) for specific version.
+
+
+###### Verify installation
+```shell
+changes help
+```
+
+#### Windows
+
+On Windows, you can run the installation commands with Git Bash, which comes with [Git for Windows](https://git-scm.com/download/win).
+
+#### No curl
+
+Some OS or containers don't have `curl`. For example, [alpine linux](https://github.com/alpinelinux/docker-alpine).
+
+Use `wget -O- -nv` instead of `curl -sSfL`.
+```shell
+wget -O- -nv https://raw.githubusercontent.com/rusinikita/changes/master/install.sh | sh -s -- -b ~/bin latest
+```
 
 ## Project folder
 
 - Create .changes.yaml (or toml) file inside your repository
-- Setup rules
+- Copy rules from example
 
-## GitLab runner
-
-Install `changes` on to runner machine.
-
-```
-go install github.com/rusinikita/changes/cmd/changes@570e84e
-```
-
-Add cli call in .gitlab-ci.yaml
-
-```
-changes check
-```
-
-## GitHub
+## GitHub actions
 
 - Use `actions/checkout` and `actions/setup-go` to create environment
 - Call `go run github.com/rusinikita/changes/cmd/changes check`
@@ -82,3 +105,7 @@ CMD ["changes", "check"]
 ```
 
 Build and run image with `-v .:/app`
+
+## GitLab runner or other software
+
+Use [binary](#binaries) or [docker](#docker) setup for your runner/worker.
