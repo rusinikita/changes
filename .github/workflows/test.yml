@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   lint:
-    name: lint
+    name: test-git-check
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -19,4 +19,4 @@ jobs:
           # skip merge commit
           ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
-      - uses: rusinikita/changes-action@master
+      - uses: rusinikita/changes-action@v0.1
