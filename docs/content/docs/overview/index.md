@@ -52,7 +52,7 @@ You can use it locally, as a CI step and in combination with messages posting to
 
 {{< figure src="github-message.png" caption="An github PR comment" >}}
 
-[See working GitHub actions configuration]({{< ref "docs/mvp-usage#github" >}})
+[See working GitHub actions configuration]({{< ref "docs/install#github" >}})
 
 ## Alternatives
 
@@ -68,16 +68,22 @@ tools for JS and Ruby community.
 
 ## Current state
 
-{{< alert context="warning" >}}
+{{< alert context="info" >}}
 {{< markdownify >}}
 
-##### Project in a beta test
+##### Production ready
+Project has solid API and active maintenance.
 
-Tutorials, footer values parsing and changelog generation in development.
-
-Please provide your feedback, needs, and ideas in project issues and forum.
+Please provide your feedback, needs, and ideas in project issues and [discussions](https://github.com/rusinikita/changes/discussions).
 
 {{< /markdownify >}}
 {{< /alert >}}
 
-See [architectural decision records]({{< ref "/docs/adr" >}}) for more information.
+{{< alert context="success" >}}
+{{< markdownify >}}
+
+##### Support
+Use `!` in issue or discussion title to get help in 2 hours.
+
+{{< /markdownify >}}
+{{< /alert >}}

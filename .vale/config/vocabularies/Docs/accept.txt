@@ -17,3 +17,6 @@ exactly
 ns
 [fF]unctions
 check
+(?i)linux
+NOTE
+TIP
