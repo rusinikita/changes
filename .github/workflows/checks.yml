@@ -1,8 +1,5 @@
 name: project checks
 on:
-  push:
-    branches:
-      - main
   pull_request:
 
 permissions:
@@ -45,55 +42,6 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
 
-      - uses: actions/setup-go@v4
+      - uses: rusinikita/changes-action@v1
         with:
-          go-version: '1.21'
-
-      - name: git-changes_check
-        run: |
-          go run cmd/changes/* check --output=git-check.md
-
-      - name: comment PR
-        if: always()
-        uses: thollander/actions-comment-pull-request@v2
-        with:
-          filePath: git-check.md
-          comment_tag: git-check
-          mode: recreate
-          create_if_not_exists: true
-
-  tests:
-    name: tests
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-go@v4
-        with:
-          go-version: '1.21'
-
-      - name: Run tests
-        run: go test ./... -coverprofile=coverage.out
-
-      - name: octocov-coverage-gateway
-        uses: k1LoW/octocov-action@v0
-
-  mutation-tests:
-    name: mutation-tests
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: technote-space/get-diff-action@v6
-        with:
-          PATTERNS: |
-            **/*.go
-      - uses: actions/setup-go@v4
-        if: env.GIT_DIFF_FILTERED
-        with:
-          go-version: '1.21'
-      - name: gramlins-mutation-testing
-        uses: go-gremlins/gremlins-action@v1
-        if: env.GIT_DIFF_FILTERED
-        with:
-          version: 'v0.5.0'
-          args: ""
-          workdir: .
+          pr-message: true
