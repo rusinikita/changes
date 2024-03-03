@@ -6,7 +6,7 @@
 
 It validates git diff with simple configuration and [CEL scripting language](https://github.com/google/cel-spec).
 
-[Visit project GH pages site for detail information](https://rusinikita.github.io/changes/)
+[Visit project GH pages site for detail documentation.](https://rusinikita.github.io/changes/)
 
 ```yaml
 commit:
@@ -60,7 +60,16 @@ tools for JS and Ruby community.
 3. Well-designed configuration and scripting DSL
 4. Go code maintainability and execution speed
 
-> [!IMPORTANT]
-> ##### Project in a beta test
-> Tutorials, footer values parsing and changelog generation in development.
-> Please provide your feedback, needs, and ideas in project issues and forum.
+## Project state
+
+> [!NOTE]
+> ##### Production ready
+> Project has solid API and active maintenance.
+> 
+> Please provide your feedback, needs, and ideas in project issues and [discussions](https://github.com/rusinikita/changes/discussions).
+
+> [!TIP]
+> #### Support
+> Use `!` in issue or discussion title to get help in 2 hours.
+
+[Visit project GH pages site for detail documentation.](https://rusinikita.github.io/changes/)
