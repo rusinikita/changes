@@ -157,9 +157,9 @@ featureGrid:
       icon: warning
       description: Lots of checks upon PR changes. Max changes, access-list secured files, no merge commits, repeated messages, etc
 
-    - title: GitHub action
-      icon: hub
-      description: It's convenient fo GitHub users.
+    - title: Functions library
+      icon: book
+      description: Do not think, just copy that works for you.
 
 # Image compare
 imageCompare:
