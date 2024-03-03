@@ -18,7 +18,7 @@ go install github.com/rusinikita/changes/cmd/changes@latest
 
 ```shell
 brew tap rusinikita/tap
-brew install rusinikita/tap/devex
+brew install rusinikita/tap/changes
 ```
 
 ## Binaries
