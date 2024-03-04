@@ -13,7 +13,7 @@ hero:
       mobile: "gradient-mobile.webp"
 
   badge:
-    text: open beta
+    text: v1
     color: primary # primary, secondary, success, danger, warning, info, light, dark
     pill: false # boolean
     soft: true # boolean
@@ -25,7 +25,7 @@ hero:
   #   height: 80px
 
   title: "Changes"
-  subtitle: A **simple** and **fast** pull request validation tool written in **Go**. Spend less time on agreements validation.
+  subtitle: A **simple** and **fast** pull request validation tool written in **Go**. Spend less time on **team agreements** validation.
 
   image: # 5
     path: "images"
@@ -59,7 +59,7 @@ commit-feature:
   title: Commit message format parsing
   subtitle: Simple configuration for any style validation
   list:
-    - text: Much simpler than over 200 symbols `regexp`
+    - text: An easier alternative to large `regexp`
       icon: done
 
     - text: Verbose validation messages
@@ -86,7 +86,7 @@ functions-feature:
   weight: 12
   template: image text
   title: Team agreements validation scripting
-  subtitle: CEL functions can validate parsed commit message params and files contend/diff
+  subtitle: CEL functions can validate parsed commit message parameters and files` content/difference
   list:
     - text: Secure - just expressions, no turing complete
       icon: done
@@ -94,7 +94,7 @@ functions-feature:
     - text: Fast and memory efficient - no VM or sandbox
       icon: done
 
-    - text: Similar to expressions in JS, python, Go, Java and C
+    - text: Similar to expressions in JS, Python, Go, Java and C
       icon: done
 
     - text: Can express almost any agreement on top of git changes
