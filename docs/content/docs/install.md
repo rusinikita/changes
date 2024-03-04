@@ -50,11 +50,6 @@ Use `wget -O- -nv` instead of `curl -sSfL`.
 wget -O- -nv https://raw.githubusercontent.com/rusinikita/changes-action/master/changes-binary-install.sh | sh -s -- -b ~/bin latest
 ```
 
-## Project folder
-
-- Create .changes.yaml (or toml) file inside your repository
-- Copy rules from example
-
 ## GitHub actions
 
 ```yaml

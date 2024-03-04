@@ -11,7 +11,7 @@ toc: true
 {{< alert context="warning" >}}
 {{< markdownify >}}
 
-Sorry, changelog generation in development. Please, share your thoughts in [discussions](https://github.com/rusinikita/changes/discussions).
+Sorry, changelog generation development in progress. Please, share your thoughts in [discussions](https://github.com/rusinikita/changes/discussions).
 
 {{< /markdownify >}}
 {{< /alert >}}

@@ -4,7 +4,7 @@
 
 `Changes` helps automate code review and enforce team agreements.
 
-It validates git diff with simple configuration and [CEL scripting language](https://github.com/google/cel-spec).
+It validates git diff with simple configuration and [the CEL scripting language](https://github.com/google/cel-spec).
 
 [Visit project GH pages site for detail documentation.](https://rusinikita.github.io/changes/)
 
@@ -40,9 +40,9 @@ Commits
 - type: value must be one of [fix ref feat]
 ```
 
-### Independent of platform
+### Autonomous
 
-You can use it locally, as a CI step and in combination with messages posting tools.
+You can use it locally, as a CI step, and in combination with messages posting tools.
 
 ![An github PR comment](docs/assets/images/github-message.png)
 
@@ -50,13 +50,13 @@ You can use it locally, as a CI step and in combination with messages posting to
 
 ## Alternatives
 
-[Danger](https://danger.systems/js) and [conventional-changelog](https://github.com/conventional-changelog) - great
+[Danger](https://danger.systems/js) and [conventional-changelog](https://github.com/conventional-changelog) - both great
 tools for JS and Ruby community.
 
-`Changes` brings advantages for other languages users:
+`Changes` brings advantages for users of other languages:
 
 1. yaml/toml configuration familiarity and simplicity
-2. One tool to rule. Set message format and use parsed values in diff validation and changelog generation
+2. One tool to rule. Validation and changelog generation use the same message format
 3. Well-designed configuration and scripting DSL
 4. Go code maintainability and execution speed
 
@@ -66,10 +66,10 @@ tools for JS and Ruby community.
 > ##### Production ready
 > Project has solid API and active maintenance.
 > 
-> Please provide your feedback, needs, and ideas in project issues and [discussions](https://github.com/rusinikita/changes/discussions).
+> Please provide your feedback and ideas in [discussions](https://github.com/rusinikita/changes/discussions).
 
 > [!TIP]
 > #### Support
-> Use `!` in issue or discussion title to get help in 2 hours.
+> Use `!` in [issue title](https://github.com/rusinikita/changes/issues/new) to get help within 2 hours.
 
 [Visit project GH pages site for detail documentation.](https://rusinikita.github.io/changes/)
